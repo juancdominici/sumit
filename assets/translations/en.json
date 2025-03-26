@@ -1,0 +1,196 @@
+{
+    "settings": {
+        "languages": {
+            "en": "English",
+            "es": "Spanish"
+        },
+        "title": "Settings",
+        "defaultExpense": "Default to Expense",
+        "defaultExpenseSubtitle": "Start new entries as expenses",
+        "darkMode": "Dark Mode",
+        "darkModeSubtitle": "Enable dark theme",
+        "currency": "Currency",
+        "currencySubtitle": "Select your currency",
+        "language": "Language",
+        "languageSubtitle": "Select your language",
+        "logout": "Logout",
+        "selectCountryCurrency": "Select Country/Currency",
+        "searchCountryCurrency": "Search country or currency...",
+        "selectLanguage": "Select Language",
+        "error": {
+            "updateCurrency": "Failed to update currency: {error}",
+            "updateLanguage": "Failed to update language: {error}",
+            "updatePreferences": "Failed to update preferences: {error}"
+        },
+        "retry": "Retry"
+    },
+    "auth": {
+        "welcome": "Welcome to Sumit",
+        "subtitle": "Your personal finance manager",
+        "login": {
+            "title": "Login",
+            "email": "Email",
+            "password": "Password",
+            "loginButton": "Login",
+            "signupButton": "Sign Up",
+            "subtitle": "Sign in to continue",
+            "continue": "Continue"
+        },
+        "signup": {
+            "title": "Sign Up",
+            "email": "Email",
+            "password": "Password",
+            "signupButton": "Sign Up",
+            "loginButton": "Log in",
+            "success": "User created, verify your account first!",
+            "subtitle": "Sign up to get started",
+            "continue": "Continue"
+        },
+        "signup_config": {
+            "title": "Let's get you started",
+            "subtitle": "You can change these settings later in the settings menu",
+            "finishButton": "Finish Setup"
+        }
+    },
+    "display": {
+        "spending": "SPENDING",
+        "earned": "EARNED",
+        "tag": "Tag",
+        "recurring": {
+            "daily": "Daily",
+            "weekly": "Weekly every {day}",
+            "monthly": "Monthly on the {day}{suffix}",
+            "yearly": "Yearly every {month} {day}",
+            "last_month_day": "Last day of month",
+            "last_business_day": "Last business day of month",
+            "bi_weekly": "Every two weeks on {day}"
+        }
+    },
+    "calendar": {
+        "month": "Month",
+        "recurring": {
+            "title": "Repeat",
+            "none": {
+                "text": "No repeat",
+                "description": "One-time transaction",
+                "title": "Date"
+            },
+            "daily": {
+                "text": "Daily",
+                "description": "Repeats every day"
+            },
+            "weekly": {
+                "text": "Weekly",
+                "description": "Repeats every week on the same day",
+                "weekdays": {
+                    "monday": "Monday",
+                    "tuesday": "Tuesday",
+                    "wednesday": "Wednesday",
+                    "thursday": "Thursday",
+                    "friday": "Friday",
+                    "saturday": "Saturday",
+                    "sunday": "Sunday"
+                }
+            },
+            "monthly": {
+                "text": "Monthly",
+                "description": "Repeats every month on the same date",
+                "every": "Every",
+                "of_the_month": "of the month",
+                "warning": "Note: When selecting the 29th, 30th, or 31st, transactions in months without these days will occur on the last day of those months."
+            },
+            "yearly": {
+                "text": "Yearly",
+                "description": "Repeats every year on the same date",
+                "every": "Every"
+            },
+            "last_month_day": {
+                "text": "Last Day of Month",
+                "description": "Repeats on the last day of each month",
+                "from": "Starting from:"
+            },
+            "last_business_day": {
+                "text": "Last Business Day",
+                "description": "Repeats on the last business day of each month",
+                "from": "Starting from:",
+                "to": "To"
+            },
+            "bi_weekly": {
+                "text": "Bi-Weekly",
+                "description": "Repeats every two weeks on the same day"
+            },
+            "date_selector": {
+                "bi_weekly": {
+                    "title": "Bi-Weekly Setup",
+                    "every_two_weeks": "Every two weeks on:",
+                    "starting_from": "Starting from:"
+                },
+                "daily": {
+                    "title": "Daily Setup",
+                    "starting_from": "Starting from:"
+                },
+                "weekly": {
+                    "title": "Weekly Setup",
+                    "every_week": "Every week on:"
+                },
+                "monthly": {
+                    "title": "Monthly Setup",
+                    "day_of_month": "Day of month:"
+                },
+                "yearly": {
+                    "title": "Yearly Setup",
+                    "month": "Month:",
+                    "day": "Day:"
+                },
+                "none": {
+                    "title": "Date",
+                    "select_date": "Select date"
+                },
+                "last_month_day": {
+                    "title": "Last Day of Month Setup",
+                    "month_selection": "Select starting month:",
+                    "note": "Always falls on the final day of each month"
+                },
+                "last_business_day": {
+                    "title": "Last Business Day Setup",
+                    "month_selection": "Select starting month:",
+                    "note": "It will be the last working day (Mon-Fri) of each month, which may vary between the 28th and 31st."
+                },
+                "weekdays": {
+                    "monday": "Monday",
+                    "tuesday": "Tuesday",
+                    "wednesday": "Wednesday",
+                    "thursday": "Thursday",
+                    "friday": "Friday",
+                    "saturday": "Saturday",
+                    "sunday": "Sunday"
+                }
+            }
+        }
+    },
+    "keypad": {
+        "success": "Record added successfully",
+        "error": "Error: {error}"
+    },
+    "records": {
+        "show_list": "Show records list",
+        "show_home": "Show home",
+        "empty": "No records found.\nStart by adding some transactions first!",
+        "no_tag": "No tag",
+        "filter": "Filter by date:",
+        "reset_filter": "Reset filter",
+        "frequent_tags": "Frequent Tags",
+        "income": "Income",
+        "expenses": "Expenses",
+        "balance": "Balance",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "deleted": "Record deleted",
+        "undo": "Undo",
+        "delete_confirmation_title": "Delete Record",
+        "delete_confirmation_message": "Are you sure you want to delete this record? This action cannot be undone.",
+        "delete_recurring_title": "Delete Recurring Record",
+        "delete_recurring_warning": "This will delete all future instances of this recurring record. Are you sure?",
+        "future_records": "{count} future records"
+    }
+}
