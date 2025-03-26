@@ -50,6 +50,28 @@
             "title": "Empecemos con algunas preferencias",
             "subtitle": "Podrás cambiarlas luego desde el menú de configuración",
             "finishButton": "Finalizar Configuración"
+        },
+        "group_creation": {
+            "title": "Crear un Grupo",
+            "subtitle": "Crea un grupo para compartir gastos con amigos y familia",
+            "group_name": "Nombre del Grupo",
+            "group_name_required": "Por favor ingresa un nombre para el grupo",
+            "invite_link": "Enlace de Invitación",
+            "create_group": "Crear Grupo",
+            "skip_button": "Omitir por ahora",
+            "created_successfully": "¡Grupo creado exitosamente!",
+            "invite_link_copied": "Enlace de invitación copiado al portapapeles"
+        },
+        "group_join": {
+            "title": "Unirse al Grupo",
+            "join_button": "Unirse al Grupo",
+            "success": "¡Te has unido exitosamente al grupo!",
+            "back_to_home": "Volver al Inicio",
+            "error": {
+                "group_not_found": "Grupo no encontrado",
+                "already_member": "Ya eres miembro de este grupo",
+                "generic": "Error al unirse al grupo: {error}"
+            }
         }
     },
     "display": {
@@ -173,6 +195,7 @@
         "error": "Error: {error}"
     },
     "records": {
+        "title": "Registros",
         "show_list": "Mostrar lista de registros",
         "show_home": "Mostrar inicio",
         "empty": "No se encontraron registros.\n¡Comenzá añadiendo algunas transacciones!",
@@ -192,5 +215,13 @@
         "delete_recurring_title": "Eliminar Registro Recurrente",
         "delete_recurring_warning": "Esto eliminará todas las instancias futuras de este registro recurrente. ¿Estás seguro?",
         "future_records": "{count} registros futuros"
+    },
+    "home": {
+        "title": "Inicio"
+    },
+    "groups": {
+        "title": "Mis Grupos",
+        "empty": "No te has unido a ningún grupo todavía",
+        "create": "Crear un Grupo"
     }
 }

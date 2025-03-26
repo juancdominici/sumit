@@ -50,6 +50,17 @@
             "title": "Let's get you started",
             "subtitle": "You can change these settings later in the settings menu",
             "finishButton": "Finish Setup"
+        },
+        "group_creation": {
+            "title": "Create a Group",
+            "subtitle": "Create a group to share expenses with friends and family",
+            "group_name": "Group Name",
+            "group_name_required": "Please enter a group name",
+            "invite_link": "Invite Link",
+            "create_group": "Create Group",
+            "skip_button": "Skip for now",
+            "created_successfully": "Group created successfully!",
+            "invite_link_copied": "Invite link copied to clipboard"
         }
     },
     "display": {
@@ -173,6 +184,7 @@
         "error": "Error: {error}"
     },
     "records": {
+        "title": "Records",
         "show_list": "Show records list",
         "show_home": "Show home",
         "empty": "No records found.\nStart by adding some transactions first!",
@@ -192,5 +204,13 @@
         "delete_recurring_title": "Delete Recurring Record",
         "delete_recurring_warning": "This will delete all future instances of this recurring record. Are you sure?",
         "future_records": "{count} future records"
+    },
+    "home": {
+        "title": "Home"
+    },
+    "groups": {
+        "title": "My Groups",
+        "empty": "You haven't joined any groups yet",
+        "create": "Create a Group"
     }
 }

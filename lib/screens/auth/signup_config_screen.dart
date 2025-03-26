@@ -158,7 +158,7 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
         hasFirstLogin: true,
       );
 
-      await _navigateWithAnimation('/');
+      await _navigateWithAnimation('/group-creation');
     } catch (e) {
       logger.e(e);
       if (mounted) {

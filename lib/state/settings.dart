@@ -11,6 +11,7 @@ class SettingsState extends JuneState {
     darkMode: false,
     language: '',
     hasFirstLogin: false,
+    hasCreatedGroup: false,
   );
 
   List<Currency> currencies = [];
@@ -104,6 +105,7 @@ class SettingsState extends JuneState {
           darkMode: false,
           language: '',
           hasFirstLogin: false,
+          hasCreatedGroup: false,
         );
         await Supabase.instance.client
             .from('user_preferences')
@@ -150,6 +152,7 @@ class SettingsState extends JuneState {
     String? currency,
     String? language,
     bool? hasFirstLogin,
+    bool? hasCreatedGroup,
   }) async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
@@ -160,6 +163,7 @@ class SettingsState extends JuneState {
       currency: currency ?? userPreferences.currency,
       language: language ?? userPreferences.language,
       hasFirstLogin: hasFirstLogin ?? userPreferences.hasFirstLogin,
+      hasCreatedGroup: hasCreatedGroup ?? userPreferences.hasCreatedGroup,
     );
 
     try {

@@ -6,6 +6,7 @@ import 'package:sumit/state/settings.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/auth/module.dart';
+import 'screens/groups/group_list_screen.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -18,11 +19,13 @@ final router = GoRouter(
 
     logger.i('Router redirect: ${uri.toString()}');
 
-    // Deep link handling for auth callbacks from email
+    // Deep link handling for auth callbacks and group joins
     if (uri.toString().startsWith('ar.com.sumit')) {
-      // TODO: Handle specific deep link cases
       if (uri.toString().contains('/auth-callback')) {
         return '/auth-callback';
+      } else if (uri.toString().contains('/join/')) {
+        final groupId = uri.pathSegments.last;
+        return '/join/$groupId';
       }
     }
 
@@ -31,12 +34,14 @@ final router = GoRouter(
     final isOnAuthScreen =
         state.uri.path == '/auth' || state.uri.path == '/auth-callback';
     final isOnSignupConfigScreen = state.uri.path == '/signup-config';
+    final isOnGroupCreationScreen = state.uri.path == '/group-creation';
+    final isOnGroupJoinScreen = state.uri.path.startsWith('/join/');
 
     logger.i(
       'Auth state: isLoggedIn=$isLoggedIn, isOnAuthScreen=$isOnAuthScreen, path=${state.uri.path}',
     );
 
-    if (!isLoggedIn && !isOnAuthScreen) {
+    if (!isLoggedIn && !isOnAuthScreen && !isOnGroupJoinScreen) {
       logger.i('Not logged in, redirecting to auth');
       return '/auth';
     }
@@ -49,14 +54,21 @@ final router = GoRouter(
         return null;
       }
 
-      // If we're already on signup-config, stay there
-      if (isOnSignupConfigScreen) {
+      // If we're already on signup-config, group-creation, or group-join, stay there
+      if (isOnSignupConfigScreen ||
+          isOnGroupCreationScreen ||
+          isOnGroupJoinScreen) {
         return null;
       }
 
       // Check if user needs to complete signup config
       if (!settingsState.userPreferences.hasFirstLogin) {
         return '/signup-config';
+      }
+
+      // Check if user needs to create a group
+      if (!settingsState.userPreferences.hasCreatedGroup) {
+        return '/group-creation';
       }
 
       // If on auth screen, redirect to home
@@ -87,6 +99,20 @@ final router = GoRouter(
     GoRoute(
       path: '/signup-config',
       builder: (context, state) => const SignupConfigScreen(),
+    ),
+    GoRoute(
+      path: '/group-creation',
+      builder: (context, state) => const GroupCreationScreen(),
+    ),
+    GoRoute(
+      path: '/join/:groupId',
+      builder:
+          (context, state) =>
+              GroupJoinScreen(groupId: state.pathParameters['groupId']!),
+    ),
+    GoRoute(
+      path: '/groups',
+      builder: (context, state) => const GroupListScreen(),
     ),
   ],
 );

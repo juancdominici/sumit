@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:june/june.dart';
 import 'package:sumit/screens/display.dart';
 import 'package:sumit/screens/keypad.dart';
@@ -9,6 +10,7 @@ import 'package:sumit/state/module.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:sumit/services/translations_service.dart';
 import 'package:sumit/utils.dart';
+import 'package:sumit/router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,65 +49,80 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: 100,
         actionsPadding: const EdgeInsets.only(right: 24.0),
         actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 0, 10.0),
-            child: IconButton(
-              icon: Icon(
-                _showRecordsList ? Icons.home : Icons.list,
-                color: Theme.of(context).iconTheme.color,
-                size: 38,
+          SpeedDial(
+            icon: Icons.menu,
+            activeIcon: Icons.close,
+            buttonSize: const Size(56, 56),
+            shape: const CircleBorder(),
+            direction: SpeedDialDirection.down,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            spacing: 12,
+            spaceBetweenChildren: 8,
+            children: [
+              SpeedDialChild(
+                child: const Icon(Icons.group),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                label: context.translate("groups.title"),
+                shape: const CircleBorder(),
+                onTap: () => router.push('/groups'),
               ),
-              tooltip:
-                  _showRecordsList
-                      ? context.translate('records.show_home')
-                      : context.translate('records.show_list'),
-              onPressed: () {
-                setState(() {
-                  _showRecordsList = !_showRecordsList;
-                  final recordsState = June.getState(() => RecordsState());
-                  recordsState.fetchRecords();
-                });
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: IconButton(
-              icon: Icon(
-                Icons.settings,
-                color: Theme.of(context).iconTheme.color,
-                size: 38,
+              SpeedDialChild(
+                child:
+                    _showRecordsList
+                        ? const Icon(Icons.home)
+                        : const Icon(Icons.list),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                label:
+                    _showRecordsList
+                        ? context.translate("records.show_home")
+                        : context.translate("records.show_list"),
+                shape: const CircleBorder(),
+                onTap:
+                    () => setState(() {
+                      _showRecordsList = !_showRecordsList;
+                    }),
               ),
-              tooltip: context.translate('settings.title'),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 400,
-                      decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).bottomSheetTheme.backgroundColor,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[SettingsBlock()],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+              SpeedDialChild(
+                child: const Icon(Icons.settings),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                label: context.translate("settings.title"),
+                shape: const CircleBorder(),
+                onTap:
+                    () => showModalBottomSheet(
+                      context: context,
+                      builder:
+                          (BuildContext context) => Container(
+                            height: 400,
+                            decoration: BoxDecoration(
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).bottomSheetTheme.backgroundColor,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [const SettingsBlock()],
+                              ),
+                            ),
+                          ),
+                      isDismissible: true,
+                      enableDrag: true,
+                    ),
+              ),
+            ],
           ),
         ],
       ),
@@ -162,11 +179,4 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
     );
   }
-}
-
-bool isSameDay(DateTime? dateA, DateTime dateB) {
-  if (dateA == null) return false;
-  return dateA.year == dateB.year &&
-      dateA.month == dateB.month &&
-      dateA.day == dateB.day;
 }
