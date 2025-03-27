@@ -58,19 +58,28 @@
             "group_name_required": "Por favor ingresa un nombre para el grupo",
             "invite_link": "Enlace de Invitación",
             "create_group": "Crear Grupo",
+            "continue_button": "Continuar",
             "skip_button": "Omitir por ahora",
             "created_successfully": "¡Grupo creado exitosamente!",
-            "invite_link_copied": "Enlace de invitación copiado al portapapeles"
+            "invite_link_copied": "Enlace de invitación copiado al portapapeles",
+            "group_created": "¡Grupo Creado!",
+            "share_invite": "Comparte el enlace de invitación con tus amigos para comenzar a compartir gastos",
+            "copy_invite": "Copiar Enlace de Invitación",
+            "share_button": "Compartir Invitación",
+            "share_subject": "Únete a mi grupo '{group_name}' en Sumit",
+            "share_message": "¡Únete al grupo '{group_name}' en Sumit y comienza a compartir tus gastos! Haz clic en el enlace de abajo para unirte:"
         },
         "group_join": {
             "title": "Unirse al Grupo",
+            "subtitle": "Has sido invitado a unirte a un grupo",
             "join_button": "Unirse al Grupo",
-            "success": "¡Te has unido exitosamente al grupo!",
+            "cancel_button": "Cancelar",
             "back_to_home": "Volver al Inicio",
+            "joined_successfully": "¡Te has unido al grupo exitosamente!",
             "error": {
                 "group_not_found": "Grupo no encontrado",
                 "already_member": "Ya eres miembro de este grupo",
-                "generic": "Error al unirse al grupo: {error}"
+                "user_not_found": "Usuario no encontrado"
             }
         }
     },

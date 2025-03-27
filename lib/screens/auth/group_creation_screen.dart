@@ -7,7 +7,7 @@ import 'package:sumit/state/module.dart';
 import 'package:sumit/services/translations_service.dart';
 import 'package:sumit/models/group.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 
 class GroupCreationScreen extends StatefulWidget {
   const GroupCreationScreen({super.key});
@@ -20,6 +20,7 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  bool _groupCreated = false;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -101,8 +102,8 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
 
       await supabase.from('group_members').insert(memberData);
 
-      // Generate invite link
-      _inviteLink = 'ar.com.sumit://join/${group.id}';
+      // Generate invite link with a proper URL format
+      _inviteLink = 'https://sumit.app/join/${group.id}';
 
       // Update user preferences to mark group as created
       final settingsState = June.getState(() => SettingsState());
@@ -119,9 +120,10 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
         );
       }
 
-      // Navigate to home screen after a short delay
-      await Future.delayed(const Duration(seconds: 2));
-      await _navigateWithAnimation('/');
+      setState(() {
+        _groupCreated = true;
+        _isLoading = false;
+      });
     } catch (e) {
       logger.e(e);
       if (mounted) {
@@ -132,12 +134,9 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
           ),
         );
       }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -220,30 +219,28 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
                               ),
                               const SizedBox(height: 48),
 
-                              // Group Name Input
-                              TextFormField(
-                                controller: _groupNameController,
-                                decoration: InputDecoration(
-                                  labelText: context.translate(
-                                    'auth.group_creation.group_name',
+                              // Group Name Input or Display
+                              if (!_groupCreated)
+                                TextFormField(
+                                  controller: _groupNameController,
+                                  decoration: InputDecoration(
+                                    labelText: context.translate(
+                                      'auth.group_creation.group_name',
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return context.translate(
-                                      'auth.group_creation.group_name_required',
-                                    );
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 24),
-
-                              // Invite Link Section (shown after group creation)
-                              if (_inviteLink.isNotEmpty) ...[
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return context.translate(
+                                        'auth.group_creation.group_name_required',
+                                      );
+                                    }
+                                    return null;
+                                  },
+                                )
+                              else
                                 Card(
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
@@ -259,48 +256,82 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          context.translate(
-                                            'auth.group_creation.invite_link',
-                                          ),
-                                          style: theme.textTheme.titleMedium,
-                                        ),
-                                        const SizedBox(height: 8),
                                         Row(
                                           children: [
+                                            Icon(
+                                              Icons.check_circle_outline,
+                                              color: theme.colorScheme.primary,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 8),
                                             Expanded(
                                               child: Text(
-                                                _inviteLink,
+                                                context.translate(
+                                                  'auth.group_creation.group_created',
+                                                ),
                                                 style:
-                                                    theme.textTheme.bodyMedium,
-                                                overflow: TextOverflow.ellipsis,
+                                                    theme.textTheme.titleMedium,
                                               ),
                                             ),
-                                            IconButton(
-                                              icon: const Icon(Icons.copy),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          _groupNameController.text,
+                                          style: theme.textTheme.headlineSmall
+                                              ?.copyWith(
+                                                color:
+                                                    theme.colorScheme.primary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          context.translate(
+                                            'auth.group_creation.share_invite',
+                                          ),
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
+                                                color: theme
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withOpacity(0.7),
+                                              ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            TextButton.icon(
                                               onPressed: () async {
-                                                await Clipboard.setData(
-                                                  ClipboardData(
-                                                    text: _inviteLink,
-                                                  ),
+                                                final subject = context.translate(
+                                                  'auth.group_creation.share_subject',
+                                                  args: {
+                                                    'group_name':
+                                                        _groupNameController
+                                                            .text,
+                                                  },
                                                 );
-                                                if (mounted) {
-                                                  ScaffoldMessenger.of(
-                                                    context,
-                                                  ).showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        context.translate(
-                                                          'auth.group_creation.invite_link_copied',
-                                                        ),
-                                                      ),
-                                                      behavior:
-                                                          SnackBarBehavior
-                                                              .floating,
-                                                    ),
-                                                  );
-                                                }
+                                                final message = context.translate(
+                                                  'auth.group_creation.share_message',
+                                                  args: {
+                                                    'group_name':
+                                                        _groupNameController
+                                                            .text,
+                                                  },
+                                                );
+                                                await Share.share(
+                                                  '$message\n\n$_inviteLink',
+                                                  subject: subject,
+                                                );
                                               },
+                                              icon: const Icon(Icons.share),
+                                              label: Text(
+                                                context.translate(
+                                                  'auth.group_creation.share_button',
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -308,65 +339,95 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 24),
-                              ],
+                              if (!_groupCreated) const SizedBox(height: 24),
 
-                              // Create Group Button
-                              ElevatedButton(
-                                onPressed: _isLoading ? null : _createGroup,
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
+                              // Create Group Button or Continue Button
+                              if (_groupCreated)
+                                ElevatedButton(
+                                  onPressed:
+                                      _isLoading
+                                          ? null
+                                          : () => _navigateWithAnimation('/'),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    backgroundColor: theme.colorScheme.primary,
+                                    foregroundColor:
+                                        theme.colorScheme.onPrimary,
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                  child: Text(
+                                    context.translate(
+                                      'auth.group_creation.continue_button',
+                                    ),
+                                    style: const TextStyle(fontSize: 16),
                                   ),
-                                  backgroundColor: theme.colorScheme.primary,
-                                  foregroundColor: theme.colorScheme.onPrimary,
+                                )
+                              else
+                                ElevatedButton(
+                                  onPressed: _isLoading ? null : _createGroup,
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    backgroundColor: theme.colorScheme.primary,
+                                    foregroundColor:
+                                        theme.colorScheme.onPrimary,
+                                  ),
+                                  child:
+                                      _isLoading
+                                          ? SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color:
+                                                  theme.colorScheme.onPrimary,
+                                            ),
+                                          )
+                                          : Text(
+                                            context.translate(
+                                              'auth.group_creation.create_group',
+                                            ),
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                 ),
-                                child:
-                                    _isLoading
-                                        ? SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: theme.colorScheme.onPrimary,
-                                          ),
-                                        )
-                                        : Text(
-                                          context.translate(
-                                            'auth.group_creation.create_group',
-                                          ),
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                              ),
                               const SizedBox(height: 16),
-                              // Skip Button
-                              TextButton(
-                                onPressed:
-                                    _isLoading
-                                        ? null
-                                        : () async {
-                                          // Update user preferences to mark group as created (skipped)
-                                          final settingsState = June.getState(
-                                            () => SettingsState(),
-                                          );
-                                          await settingsState.updatePreferences(
-                                            hasCreatedGroup: true,
-                                          );
-                                          await _navigateWithAnimation('/');
-                                        },
-                                child: Text(
-                                  context.translate(
-                                    'auth.group_creation.skip_button',
-                                  ),
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSurface
-                                        .withOpacity(0.7),
+                              // Skip Button (only shown before group creation)
+                              if (!_groupCreated)
+                                TextButton(
+                                  onPressed:
+                                      _isLoading
+                                          ? null
+                                          : () async {
+                                            // Update user preferences to mark group as created (skipped)
+                                            final settingsState = June.getState(
+                                              () => SettingsState(),
+                                            );
+                                            await settingsState
+                                                .updatePreferences(
+                                                  hasCreatedGroup: true,
+                                                );
+                                            await _navigateWithAnimation('/');
+                                          },
+                                  child: Text(
+                                    context.translate(
+                                      'auth.group_creation.skip_button',
+                                    ),
+                                    style: TextStyle(
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.7),
+                                    ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                         ),

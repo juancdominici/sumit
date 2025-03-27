@@ -29,6 +29,12 @@ final router = GoRouter(
       }
     }
 
+    // Handle web URLs for group joins
+    if (uri.host == 'sumit.app' && uri.path.startsWith('/join/')) {
+      final groupId = uri.pathSegments.last;
+      return '/join/$groupId';
+    }
+
     // Standard authentication flow
     final isLoggedIn = isAuthenticated();
     final isOnAuthScreen =

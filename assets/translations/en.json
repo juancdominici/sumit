@@ -58,9 +58,29 @@
             "group_name_required": "Please enter a group name",
             "invite_link": "Invite Link",
             "create_group": "Create Group",
+            "continue_button": "Continue",
             "skip_button": "Skip for now",
             "created_successfully": "Group created successfully!",
-            "invite_link_copied": "Invite link copied to clipboard"
+            "invite_link_copied": "Invite link copied to clipboard",
+            "group_created": "Group Created!",
+            "share_invite": "Share the invite link with your friends to start sharing expenses",
+            "copy_invite": "Copy Invite Link",
+            "share_button": "Share Invite",
+            "share_subject": "Join my group '{group_name}' on Sumit",
+            "share_message": "Join the '{group_name}' group on Sumit and start sharing your expenses! Click the link below to join:"
+        },
+        "group_join": {
+            "title": "Join Group",
+            "subtitle": "You've been invited to join a group",
+            "join_button": "Join Group",
+            "cancel_button": "Cancel",
+            "back_to_home": "Back to Home",
+            "joined_successfully": "Successfully joined the group!",
+            "error": {
+                "group_not_found": "Group not found",
+                "already_member": "You are already a member of this group",
+                "user_not_found": "User not found"
+            }
         }
     },
     "display": {
