@@ -88,10 +88,9 @@ class RecordsState extends JuneState {
           .lte('date', endDate.toIso8601String()) // Records up to end of month
           .order('date', ascending: false);
 
-      List<Record> allRecords =
-          List<Map<String, dynamic>>.from(
-            response,
-          ).map((map) => Record.fromMap(map)).toList();
+      List<Record> allRecords = List<Map<String, dynamic>>.from(
+        response,
+      ).map((map) => Record.fromMap(map)).toList();
 
       // Get all recurring records (we need all of them to generate instances correctly)
       final recurringResponse = await Supabase.instance.client
@@ -105,10 +104,9 @@ class RecordsState extends JuneState {
           ) // Only get recurring records created up to this month
           .order('date', ascending: false);
 
-      List<Record> allRecurringRecords =
-          List<Map<String, dynamic>>.from(
-            recurringResponse,
-          ).map((map) => Record.fromMap(map)).toList();
+      List<Record> allRecurringRecords = List<Map<String, dynamic>>.from(
+        recurringResponse,
+      ).map((map) => Record.fromMap(map)).toList();
 
       // Filter non-recurring records for the target month
       List<Record> monthRecords =
@@ -289,29 +287,25 @@ class RecordsState extends JuneState {
     switch (recurringType) {
       case RecurringType.daily:
         // For daily, add each day in the month
-        for (
-          var day = startDate;
-          day.isBefore(endDate.add(const Duration(days: 1)));
-          day = day.add(const Duration(days: 1))
-        ) {
+        for (var day = startDate;
+            day.isBefore(endDate.add(const Duration(days: 1)));
+            day = day.add(const Duration(days: 1))) {
           dates.add(day);
         }
         break;
 
       case RecurringType.weekly:
         // For weekly, add matching weekdays in the month
-        for (
-          var day = startDate;
-          day.isBefore(endDate.add(const Duration(days: 1)));
-          day = day.add(const Duration(days: 1))
-        ) {
+        for (var day = startDate;
+            day.isBefore(endDate.add(const Duration(days: 1)));
+            day = day.add(const Duration(days: 1))) {
           if (day.weekday == baseDate.weekday) {
             dates.add(day);
           }
         }
         break;
 
-      case RecurringType.bi_weekly:
+      case RecurringType.biweekly:
         // For bi-weekly, add matching weekdays every other week
         // Find the first occurrence in or before the start date
         DateTime biWeeklyDate = baseDate;
@@ -356,12 +350,12 @@ class RecordsState extends JuneState {
         }
         break;
 
-      case RecurringType.last_month_day:
+      case RecurringType.lastMonthDay:
         // Add the last day of the month
         dates.add(endDate);
         break;
 
-      case RecurringType.last_business_day:
+      case RecurringType.lastBusinessDay:
         // Find the last business day (not a weekend)
         DateTime lastBusinessDay = endDate;
         while (lastBusinessDay.weekday == DateTime.saturday ||
@@ -409,8 +403,8 @@ class RecordsState extends JuneState {
       // Update the record with deletion date instead of removing it
       await Supabase.instance.client
           .from('records')
-          .update({'deleted': DateTime.now().toUtc().toIso8601String()})
-          .eq('id', recordId);
+          .update({'deleted': DateTime.now().toUtc().toIso8601String()}).eq(
+              'id', recordId);
 
       // Update the local record to mark it as deleted
       final recordIndex = records.indexWhere((r) => r.id == recordId);

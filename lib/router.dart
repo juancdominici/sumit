@@ -112,9 +112,8 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/join/:groupId',
-      builder:
-          (context, state) =>
-              GroupJoinScreen(groupId: state.pathParameters['groupId']!),
+      builder: (context, state) =>
+          GroupJoinScreen(groupId: state.pathParameters['groupId']!),
     ),
     GoRoute(
       path: '/groups',

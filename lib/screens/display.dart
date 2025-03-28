@@ -55,7 +55,6 @@ class _DisplayState extends State<Display> {
       return '';
     }
 
-    final dateFormatter = DateFormat('MMMM d, y');
     final dayFormatter = DateFormat(
       'EEEE',
       Localizations.localeOf(context).languageCode,
@@ -97,13 +96,13 @@ class _DisplayState extends State<Display> {
       case RecurringType.none:
         text = DateFormat('dd/MM/yyyy').format(date);
         break;
-      case RecurringType.last_month_day:
+      case RecurringType.lastMonthDay:
         text = context.translate('display.recurring.last_month_day');
         break;
-      case RecurringType.last_business_day:
+      case RecurringType.lastBusinessDay:
         text = context.translate('display.recurring.last_business_day');
         break;
-      case RecurringType.bi_weekly:
+      case RecurringType.biweekly:
         text = context.translate(
           'display.recurring.bi_weekly',
           args: {'day': dayFormatter.format(date)},
@@ -199,10 +198,9 @@ class _DisplayState extends State<Display> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color:
-                    displayState.operator == "-"
-                        ? Colors.red.shade300
-                        : Colors.green.shade300,
+                color: displayState.operator == "-"
+                    ? Colors.red.shade300
+                    : Colors.green.shade300,
               ),
             ),
           ),
@@ -241,8 +239,8 @@ class _DisplayState extends State<Display> {
                                     return text.isEmpty
                                         ? newValue
                                         : double.tryParse(text) == null
-                                        ? oldValue
-                                        : newValue;
+                                            ? oldValue
+                                            : newValue;
                                   }),
                                 ],
                                 onChanged: (value) {
@@ -255,8 +253,7 @@ class _DisplayState extends State<Display> {
                                 keyboardType: TextInputType.none,
                                 style: TextStyle(
                                   fontSize: 48,
-                                  color:
-                                      Theme.of(
+                                  color: Theme.of(
                                         context,
                                       ).textTheme.bodyMedium?.color ??
                                       Colors.black54,
@@ -275,8 +272,7 @@ class _DisplayState extends State<Display> {
                                   ),
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color:
-                                        Theme.of(
+                                    color: Theme.of(
                                           context,
                                         ).textTheme.bodyMedium?.color ??
                                         Colors.black38,
@@ -297,36 +293,33 @@ class _DisplayState extends State<Display> {
                       duration: Duration(milliseconds: 300),
                       width: _isExpanded ? 200.0 : 0.0,
                       curve: Curves.easeInOut,
-                      child:
-                          _isExpanded
-                              ? TextField(
-                                textAlign: TextAlign.end,
-                                maxLength: 20,
-                                focusNode: _focusNode,
-                                controller: _tagController,
-                                decoration: InputDecoration(
-                                  hintText: context.translate('display.tag'),
-                                  hintStyle: TextStyle(
-                                    color:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.bodyMedium?.color,
-                                  ),
-                                  counterStyle: TextStyle(
-                                    color:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.bodyMedium?.color,
-                                  ),
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.only(right: 5),
-                                  isDense: true,
+                      child: _isExpanded
+                          ? TextField(
+                              textAlign: TextAlign.end,
+                              maxLength: 20,
+                              focusNode: _focusNode,
+                              controller: _tagController,
+                              decoration: InputDecoration(
+                                hintText: context.translate('display.tag'),
+                                hintStyle: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium?.color,
                                 ),
-                                onSubmitted: (value) {
-                                  FocusScope.of(context).unfocus();
-                                },
-                              )
-                              : null,
+                                counterStyle: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium?.color,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.only(right: 5),
+                                isDense: true,
+                              ),
+                              onSubmitted: (value) {
+                                FocusScope.of(context).unfocus();
+                              },
+                            )
+                          : null,
                     ),
                     IconButton(
                       icon: Icon(

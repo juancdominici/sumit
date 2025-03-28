@@ -95,15 +95,15 @@ class Record {
       case 'weekly':
         return RecurringType.weekly;
       case 'bi_weekly':
-        return RecurringType.bi_weekly;
+        return RecurringType.biweekly;
       case 'monthly':
         return RecurringType.monthly;
       case 'yearly':
         return RecurringType.yearly;
       case 'last_month_day':
-        return RecurringType.last_month_day;
+        return RecurringType.lastMonthDay;
       case 'last_business_day':
-        return RecurringType.last_business_day;
+        return RecurringType.lastBusinessDay;
       default:
         return RecurringType.none;
     }
