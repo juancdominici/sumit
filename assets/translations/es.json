@@ -67,7 +67,10 @@
             "copy_invite": "Copiar Enlace de Invitación",
             "share_button": "Compartir Invitación",
             "share_subject": "Únete a mi grupo '{group_name}' en Sumit",
-            "share_message": "¡Únete al grupo '{group_name}' en Sumit y comienza a compartir tus gastos! Haz clic en el enlace de abajo para unirte:"
+            "share_message": "¡Únete al grupo '{group_name}' en Sumit y comienza a compartir tus gastos! Haz clic en el enlace de abajo para unirte:",
+            "copied_to_clipboard": "Enlace de invitación copiado al portapapeles",
+            "copy_error": "Error al copiar el enlace de invitación",
+            "copy_button": "Copiar Enlace"
         },
         "group_join": {
             "title": "Unirse al Grupo",

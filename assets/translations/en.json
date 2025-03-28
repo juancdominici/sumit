@@ -67,7 +67,10 @@
             "copy_invite": "Copy Invite Link",
             "share_button": "Share Invite",
             "share_subject": "Join my group '{group_name}' on Sumit",
-            "share_message": "Join the '{group_name}' group on Sumit and start sharing your expenses! Click the link below to join:"
+            "share_message": "Join the '{group_name}' group on Sumit and start sharing your expenses! Click the link below to join:",
+            "copied_to_clipboard": "Invite link copied to clipboard",
+            "copy_error": "Failed to copy invite link",
+            "copy_button": "Copy Link"
         },
         "group_join": {
             "title": "Join Group",

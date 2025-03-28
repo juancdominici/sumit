@@ -45,7 +45,6 @@ dependencies:
   flutter_slidable: ^4.0.0
   supabase_auth_ui: ^0.5.4
   flutter_speed_dial: ^7.0.0
-  share_plus: ^7.2.1
 
 dev_dependencies:
   flutter_test:

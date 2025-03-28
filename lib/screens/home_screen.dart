@@ -58,17 +58,32 @@ class _HomeScreenState extends State<HomeScreen> {
             buttonSize: const Size(56, 56),
             shape: const CircleBorder(),
             direction: SpeedDialDirection.down,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            backgroundColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.3),
+            foregroundColor: Theme.of(context).colorScheme.primary,
+            overlayColor: Theme.of(context).colorScheme.surface,
             spacing: 12,
             spaceBetweenChildren: 8,
+            elevation: 0,
             children: [
               SpeedDialChild(
                 child: const Icon(Icons.group),
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.3),
+                foregroundColor: Theme.of(context).colorScheme.primary,
                 label: context.translate("groups.title"),
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
+                labelShadow: const [],
+                labelBackgroundColor: Colors.transparent,
                 shape: const CircleBorder(),
+                elevation: 0,
                 onTap: () => router.push('/groups'),
               ),
               SpeedDialChild(
@@ -76,13 +91,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     _showRecordsList
                         ? const Icon(Icons.home)
                         : const Icon(Icons.list),
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.3),
+                foregroundColor: Theme.of(context).colorScheme.primary,
                 label:
                     _showRecordsList
                         ? context.translate("records.show_home")
                         : context.translate("records.show_list"),
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
+                labelShadow: const [],
+                labelBackgroundColor: Colors.transparent,
                 shape: const CircleBorder(),
+                elevation: 0,
                 onTap:
                     () => setState(() {
                       _showRecordsList = !_showRecordsList;
@@ -90,10 +116,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SpeedDialChild(
                 child: const Icon(Icons.settings),
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.3),
+                foregroundColor: Theme.of(context).colorScheme.primary,
                 label: context.translate("settings.title"),
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
+                labelShadow: const [],
+                labelBackgroundColor: Colors.transparent,
                 shape: const CircleBorder(),
+                elevation: 0,
                 onTap:
                     () => showModalBottomSheet(
                       context: context,
