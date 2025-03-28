@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:june/june.dart';
-import 'package:sumit/state/module.dart';
 import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:sumit/router.dart';
@@ -31,12 +29,11 @@ class _GroupJoinScreenState extends State<GroupJoinScreen>
   Future<void> _loadGroupData() async {
     try {
       final supabase = Supabase.instance.client;
-      final response =
-          await supabase
-              .from('groups')
-              .select()
-              .eq('id', widget.groupId)
-              .single();
+      final response = await supabase
+          .from('groups')
+          .select()
+          .eq('id', widget.groupId)
+          .single();
 
       setState(() {
         _groupData = response;
@@ -68,15 +65,14 @@ class _GroupJoinScreenState extends State<GroupJoinScreen>
       }
 
       // Check if user is already a member
-      final existingMember =
-          await supabase
-              .from('group_members')
-              .select()
-              .eq('group_id', widget.groupId)
-              .eq('user_id', user.id)
-              .single();
+      final existingMember = await supabase
+          .from('group_members')
+          .select()
+          .eq('group_id', widget.groupId)
+          .eq('user_id', user.id)
+          .single();
 
-      if (existingMember != null) {
+      if (existingMember.isNotEmpty) {
         // User is already a member, just navigate to home
         await _navigateWithAnimation('/');
         return;
@@ -206,20 +202,19 @@ class _GroupJoinScreenState extends State<GroupJoinScreen>
                       backgroundColor: theme.colorScheme.primary,
                       foregroundColor: theme.colorScheme.onPrimary,
                     ),
-                    child:
-                        _isJoining
-                            ? SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: theme.colorScheme.onPrimary,
-                              ),
-                            )
-                            : Text(
-                              context.translate('auth.group_join.join_button'),
-                              style: const TextStyle(fontSize: 16),
+                    child: _isJoining
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: theme.colorScheme.onPrimary,
                             ),
+                          )
+                        : Text(
+                            context.translate('auth.group_join.join_button'),
+                            style: const TextStyle(fontSize: 16),
+                          ),
                   ),
                   const SizedBox(height: 16),
 
@@ -230,7 +225,8 @@ class _GroupJoinScreenState extends State<GroupJoinScreen>
                     child: Text(
                       context.translate('auth.group_join.cancel_button'),
                       style: TextStyle(
-                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
                     ),
                   ),

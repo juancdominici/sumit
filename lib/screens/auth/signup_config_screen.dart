@@ -226,89 +226,85 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder:
-          (context) => SizedBox(
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  height: 4,
-                  width: 32,
-                  decoration: BoxDecoration(
-                    color:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.grey.shade600
-                            : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.8,
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              height: 4,
+              width: 32,
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey.shade600
+                    : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              child: AppBar(
+                title: Text(
+                  context.translate('settings.selectCountryCurrency'),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                leading: CloseButton(),
+                backgroundColor: Colors.transparent,
+                centerTitle: true,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: TextField(
+                onChanged: settingsState.updateCurrencySearch,
+                decoration: InputDecoration(
+                  hintText: context.translate(
+                    'settings.searchCountryCurrency',
                   ),
-                  child: AppBar(
-                    title: Text(
-                      context.translate('settings.selectCountryCurrency'),
-                    ),
-                    leading: CloseButton(),
-                    backgroundColor: Colors.transparent,
-                    centerTitle: true,
-                  ),
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: TextField(
-                    onChanged: settingsState.updateCurrencySearch,
-                    decoration: InputDecoration(
-                      hintText: context.translate(
-                        'settings.searchCountryCurrency',
-                      ),
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: AnimatedBuilder(
-                    animation: settingsState,
-                    builder: (context, _) {
-                      final currencies = settingsState.filteredCurrencies;
-                      return ListView.builder(
-                        itemCount: currencies.length,
-                        itemBuilder: (context, index) {
-                          final currency = currencies[index];
-                          final isSelected = _selectedCurrency == currency.id;
-                          return ListTile(
-                            title: Text(currency.country),
-                            subtitle: Text(
-                              '${currency.currency} - ${currency.currencyName}',
-                            ),
-                            selected: isSelected,
-                            trailing:
-                                isSelected
-                                    ? Icon(
-                                      Icons.check,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )
-                                    : null,
-                            onTap: () {
-                              setState(() {
-                                _selectedCurrency = currency.id;
-                              });
-                              Navigator.pop(context);
-                            },
-                          );
+              ),
+            ),
+            Expanded(
+              child: AnimatedBuilder(
+                animation: settingsState,
+                builder: (context, _) {
+                  final currencies = settingsState.filteredCurrencies;
+                  return ListView.builder(
+                    itemCount: currencies.length,
+                    itemBuilder: (context, index) {
+                      final currency = currencies[index];
+                      final isSelected = _selectedCurrency == currency.id;
+                      return ListTile(
+                        title: Text(currency.country),
+                        subtitle: Text(
+                          '${currency.currency} - ${currency.currencyName}',
+                        ),
+                        selected: isSelected,
+                        trailing: isSelected
+                            ? Icon(
+                                Icons.check,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            : null,
+                        onTap: () {
+                          setState(() {
+                            _selectedCurrency = currency.id;
+                          });
+                          Navigator.pop(context);
                         },
                       );
                     },
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -330,76 +326,71 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder:
-          (context) => JuneBuilder(
-            () => TranslationsService(),
-            builder:
-                (translationsService) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      height: 4,
-                      width: 32,
-                      decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.grey.shade600
-                                : Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      child: AppBar(
-                        title: Text(
-                          context.translate('settings.selectLanguage'),
-                        ),
-                        leading: CloseButton(),
-                        backgroundColor: Colors.transparent,
-                        centerTitle: true,
-                      ),
-                    ),
-                    Flexible(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: settingsState.languages.length,
-                        itemBuilder: (context, index) {
-                          final language = settingsState.languages[index];
-                          final isSelected = _selectedLanguage == language.id;
-                          return ListTile(
-                            title: Text(
-                              context.translate(
-                                'settings.languages.${language.i18nCode}',
-                              ),
-                            ),
-                            selected: isSelected,
-                            trailing:
-                                isSelected
-                                    ? Icon(
-                                      Icons.check,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )
-                                    : null,
-                            onTap: () {
-                              setState(() {
-                                _selectedLanguage = language.id;
-                              });
-                              // Update the app's locale immediately and trigger a rebuild
-                              translationsService.setLocale(language.i18nCode);
-                              Navigator.pop(context);
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+      builder: (context) => JuneBuilder(
+        () => TranslationsService(),
+        builder: (translationsService) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              height: 4,
+              width: 32,
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey.shade600
+                    : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              child: AppBar(
+                title: Text(
+                  context.translate('settings.selectLanguage'),
                 ),
-          ),
+                leading: CloseButton(),
+                backgroundColor: Colors.transparent,
+                centerTitle: true,
+              ),
+            ),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: settingsState.languages.length,
+                itemBuilder: (context, index) {
+                  final language = settingsState.languages[index];
+                  final isSelected = _selectedLanguage == language.id;
+                  return ListTile(
+                    title: Text(
+                      context.translate(
+                        'settings.languages.${language.i18nCode}',
+                      ),
+                    ),
+                    selected: isSelected,
+                    trailing: isSelected
+                        ? Icon(
+                            Icons.check,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        : null,
+                    onTap: () {
+                      setState(() {
+                        _selectedLanguage = language.id;
+                      });
+                      // Update the app's locale immediately and trigger a rebuild
+                      translationsService.setLocale(language.i18nCode);
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -409,10 +400,9 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
       return context.translate('settings.currencySubtitle');
     }
 
-    final selectedCurrency =
-        settingsState.currencies
-            .where((c) => c.id == _selectedCurrency)
-            .firstOrNull;
+    final selectedCurrency = settingsState.currencies
+        .where((c) => c.id == _selectedCurrency)
+        .firstOrNull;
     if (selectedCurrency != null) {
       return '${selectedCurrency.currency} - ${selectedCurrency.currencyName}';
     }
@@ -426,10 +416,9 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
       return context.translate('settings.languageSubtitle');
     }
 
-    final selectedLanguage =
-        settingsState.languages
-            .where((l) => l.id == _selectedLanguage)
-            .firstOrNull;
+    final selectedLanguage = settingsState.languages
+        .where((l) => l.id == _selectedLanguage)
+        .firstOrNull;
     if (selectedLanguage != null) {
       return context.translate(
         'settings.languages.${selectedLanguage.i18nCode}',
@@ -445,305 +434,271 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
 
     return JuneBuilder(
       () => TranslationsService(),
-      builder:
-          (translationsService) => JuneBuilder(
-            () => SettingsState(),
-            builder:
-                (settingsState) => Scaffold(
-                  body: SlideTransition(
-                    position: _slideAnimation,
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: SafeArea(
-                        child: Center(
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0,
+      builder: (translationsService) => JuneBuilder(
+        () => SettingsState(),
+        builder: (settingsState) => Scaffold(
+          body: SlideTransition(
+            position: _slideAnimation,
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // App logo or icon
+                            Icon(
+                              Icons.account_balance_wallet,
+                              size: 80,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(height: 24),
+
+                            // Title
+                            Text(
+                              context.translate(
+                                'auth.signup_config.title',
                               ),
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // App logo or icon
-                                    Icon(
-                                      Icons.account_balance_wallet,
-                                      size: 80,
-                                      color: theme.colorScheme.primary,
-                                    ),
-                                    const SizedBox(height: 24),
+                              style: theme.textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
 
-                                    // Title
-                                    Text(
-                                      context.translate(
-                                        'auth.signup_config.title',
-                                      ),
-                                      style: theme.textTheme.headlineMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: theme.colorScheme.onSurface,
-                                          ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 8),
+                            // Subtitle
+                            Text(
+                              context.translate(
+                                'auth.signup_config.subtitle',
+                              ),
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.7),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 48),
 
-                                    // Subtitle
-                                    Text(
-                                      context.translate(
-                                        'auth.signup_config.subtitle',
-                                      ),
-                                      style: theme.textTheme.bodyLarge
-                                          ?.copyWith(
-                                            color: theme.colorScheme.onSurface
-                                                .withOpacity(0.7),
-                                          ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 48),
-
-                                    // Currency Selection
-                                    Card(
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        side: BorderSide(
-                                          color: theme.colorScheme.outline
-                                              .withOpacity(0.5),
-                                        ),
-                                      ),
-                                      clipBehavior: Clip.antiAlias,
-                                      margin: EdgeInsets.zero,
-                                      child: ListTile(
-                                        title: Text(
-                                          context.translate(
-                                            'settings.currency',
-                                          ),
-                                          style: theme.textTheme.titleMedium,
-                                        ),
-                                        subtitle:
-                                            _isDataLoading
-                                                ? Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 12,
-                                                      width: 12,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                            strokeWidth: 2,
-                                                            color:
-                                                                theme
-                                                                    .colorScheme
-                                                                    .primary,
-                                                          ),
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    Text(
-                                                      context.translate(
-                                                        'settings.loading',
-                                                      ),
-                                                      style:
-                                                          theme
-                                                              .textTheme
-                                                              .bodySmall,
-                                                    ),
-                                                  ],
-                                                )
-                                                : Text(
-                                                  _getCurrencyDisplayText(
-                                                    settingsState,
-                                                  ),
-                                                  style:
-                                                      theme.textTheme.bodySmall,
-                                                ),
-                                        trailing: Icon(
-                                          Icons.chevron_right,
-                                          color: theme.iconTheme.color,
-                                        ),
-                                        onTap:
-                                            _isDataLoading
-                                                ? null
-                                                : () => _showCurrencyPicker(
-                                                  context,
-                                                  settingsState,
-                                                ),
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 16),
-
-                                    // Language Selection
-                                    Card(
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        side: BorderSide(
-                                          color: theme.colorScheme.outline
-                                              .withOpacity(0.5),
-                                        ),
-                                      ),
-                                      clipBehavior: Clip.antiAlias,
-                                      margin: EdgeInsets.zero,
-                                      child: ListTile(
-                                        title: Text(
-                                          context.translate(
-                                            'settings.language',
-                                          ),
-                                          style: theme.textTheme.titleMedium,
-                                        ),
-                                        subtitle:
-                                            _isDataLoading
-                                                ? Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 12,
-                                                      width: 12,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                            strokeWidth: 2,
-                                                            color:
-                                                                theme
-                                                                    .colorScheme
-                                                                    .primary,
-                                                          ),
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    Text(
-                                                      context.translate(
-                                                        'settings.loading',
-                                                      ),
-                                                      style:
-                                                          theme
-                                                              .textTheme
-                                                              .bodySmall,
-                                                    ),
-                                                  ],
-                                                )
-                                                : Text(
-                                                  _getLanguageDisplayText(
-                                                    settingsState,
-                                                  ),
-                                                  style:
-                                                      theme.textTheme.bodySmall,
-                                                ),
-                                        trailing: Icon(
-                                          Icons.chevron_right,
-                                          color: theme.iconTheme.color,
-                                        ),
-                                        onTap:
-                                            _isDataLoading
-                                                ? null
-                                                : () => _showLanguagePicker(
-                                                  context,
-                                                  settingsState,
-                                                ),
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 16),
-
-                                    // Dark Mode
-                                    SwitchListTile(
-                                      title: Text(
-                                        context.translate('settings.darkMode'),
-                                        style: theme.textTheme.titleMedium,
-                                      ),
-                                      subtitle: Text(
-                                        context.translate(
-                                          'settings.darkModeSubtitle',
-                                        ),
-                                        style: theme.textTheme.bodySmall,
-                                      ),
-                                      value: _darkMode,
-                                      onChanged: (value) async {
-                                        setState(() {
-                                          _darkMode = value;
-                                        });
-                                        // Update settings state immediately
-                                        await settingsState.updatePreferences(
-                                          darkMode: value,
-                                        );
-                                      },
-                                      activeColor: theme.colorScheme.primary,
-                                    ),
-
-                                    // Default to Expense
-                                    SwitchListTile(
-                                      title: Text(
-                                        context.translate(
-                                          'settings.defaultExpense',
-                                        ),
-                                        style: theme.textTheme.titleMedium,
-                                      ),
-                                      subtitle: Text(
-                                        context.translate(
-                                          'settings.defaultExpenseSubtitle',
-                                        ),
-                                        style: theme.textTheme.bodySmall,
-                                      ),
-                                      value: _defaultToExpense,
-                                      onChanged: _toggleDefaultToExpense,
-                                      activeColor: theme.colorScheme.primary,
-                                    ),
-
-                                    const SizedBox(height: 24),
-
-                                    // Finish button
-                                    ElevatedButton(
-                                      onPressed:
-                                          _isLoading
-                                              ? null
-                                              : _saveUserPreferences,
-                                      style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        backgroundColor:
-                                            theme.colorScheme.primary,
-                                        foregroundColor:
-                                            theme.colorScheme.onPrimary,
-                                      ),
-                                      child:
-                                          _isLoading
-                                              ? SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                      color:
-                                                          theme
-                                                              .colorScheme
-                                                              .onPrimary,
-                                                    ),
-                                              )
-                                              : Text(
-                                                context.translate(
-                                                  'auth.signup_config.finishButton',
-                                                ),
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                    ),
-                                  ],
+                            // Currency Selection
+                            Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: theme.colorScheme.outline
+                                      .withValues(alpha: 0.5),
                                 ),
                               ),
+                              clipBehavior: Clip.antiAlias,
+                              margin: EdgeInsets.zero,
+                              child: ListTile(
+                                title: Text(
+                                  context.translate(
+                                    'settings.currency',
+                                  ),
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                subtitle: _isDataLoading
+                                    ? Row(
+                                        children: [
+                                          SizedBox(
+                                            height: 12,
+                                            width: 12,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: theme.colorScheme.primary,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            context.translate(
+                                              'settings.loading',
+                                            ),
+                                            style: theme.textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      )
+                                    : Text(
+                                        _getCurrencyDisplayText(
+                                          settingsState,
+                                        ),
+                                        style: theme.textTheme.bodySmall,
+                                      ),
+                                trailing: Icon(
+                                  Icons.chevron_right,
+                                  color: theme.iconTheme.color,
+                                ),
+                                onTap: _isDataLoading
+                                    ? null
+                                    : () => _showCurrencyPicker(
+                                          context,
+                                          settingsState,
+                                        ),
+                              ),
                             ),
-                          ),
+
+                            const SizedBox(height: 16),
+
+                            // Language Selection
+                            Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: theme.colorScheme.outline
+                                      .withValues(alpha: 0.5),
+                                ),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              margin: EdgeInsets.zero,
+                              child: ListTile(
+                                title: Text(
+                                  context.translate(
+                                    'settings.language',
+                                  ),
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                subtitle: _isDataLoading
+                                    ? Row(
+                                        children: [
+                                          SizedBox(
+                                            height: 12,
+                                            width: 12,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: theme.colorScheme.primary,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            context.translate(
+                                              'settings.loading',
+                                            ),
+                                            style: theme.textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      )
+                                    : Text(
+                                        _getLanguageDisplayText(
+                                          settingsState,
+                                        ),
+                                        style: theme.textTheme.bodySmall,
+                                      ),
+                                trailing: Icon(
+                                  Icons.chevron_right,
+                                  color: theme.iconTheme.color,
+                                ),
+                                onTap: _isDataLoading
+                                    ? null
+                                    : () => _showLanguagePicker(
+                                          context,
+                                          settingsState,
+                                        ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // Dark Mode
+                            SwitchListTile(
+                              title: Text(
+                                context.translate('settings.darkMode'),
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              subtitle: Text(
+                                context.translate(
+                                  'settings.darkModeSubtitle',
+                                ),
+                                style: theme.textTheme.bodySmall,
+                              ),
+                              value: _darkMode,
+                              onChanged: (value) async {
+                                setState(() {
+                                  _darkMode = value;
+                                });
+                                // Update settings state immediately
+                                await settingsState.updatePreferences(
+                                  darkMode: value,
+                                );
+                              },
+                              activeColor: theme.colorScheme.primary,
+                            ),
+
+                            // Default to Expense
+                            SwitchListTile(
+                              title: Text(
+                                context.translate(
+                                  'settings.defaultExpense',
+                                ),
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              subtitle: Text(
+                                context.translate(
+                                  'settings.defaultExpenseSubtitle',
+                                ),
+                                style: theme.textTheme.bodySmall,
+                              ),
+                              value: _defaultToExpense,
+                              onChanged: _toggleDefaultToExpense,
+                              activeColor: theme.colorScheme.primary,
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Finish button
+                            ElevatedButton(
+                              onPressed:
+                                  _isLoading ? null : _saveUserPreferences,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
+                                  ),
+                                ),
+                                backgroundColor: theme.colorScheme.primary,
+                                foregroundColor: theme.colorScheme.onPrimary,
+                              ),
+                              child: _isLoading
+                                  ? SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: theme.colorScheme.onPrimary,
+                                      ),
+                                    )
+                                  : Text(
+                                      context.translate(
+                                        'auth.signup_config.finishButton',
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
+              ),
+            ),
           ),
+        ),
+      ),
     );
   }
 }

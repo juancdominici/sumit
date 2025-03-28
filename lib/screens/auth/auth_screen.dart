@@ -107,7 +107,8 @@ class _AuthScreenState extends State<AuthScreen>
                       Text(
                         context.translate('auth.subtitle'),
                         style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.7),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -122,16 +123,16 @@ class _AuthScreenState extends State<AuthScreen>
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(
-                                  color: theme.colorScheme.outline.withOpacity(
-                                    0.5,
+                                  color: theme.colorScheme.outline.withValues(
+                                    alpha: 0.5,
                                   ),
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: BorderSide(
-                                  color: theme.colorScheme.outline.withOpacity(
-                                    0.5,
+                                  color: theme.colorScheme.outline.withValues(
+                                    alpha: 0.5,
                                   ),
                                 ),
                               ),
@@ -158,48 +159,48 @@ class _AuthScreenState extends State<AuthScreen>
                               ),
                             ),
                           ),
-                          child:
-                              false
-                                  ? SupaMagicAuth(
-                                    redirectUrl: 'ar.com.sumit://auth-callback',
-                                    onSuccess: (response) {
-                                      logger.i(
-                                        'Magic auth complete: $response',
-                                      );
-                                    },
-                                    onError: (error) {
-                                      logger.e('Error: $error');
-                                    },
-                                  )
-                                  : SupaEmailAuth(
-                                    redirectTo: 'ar.com.sumit://auth-callback',
-                                    onSignInComplete: (response) {
-                                      logger.i('Sign in complete: $response');
-                                      handleSignIn(response);
-                                    },
-                                    onSignUpComplete: (response) {
-                                      logger.i('Sign up complete');
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            context.translate(
-                                              'signup_complete',
-                                            ),
+                          // TODO: Use a feature flag to toggle between auth methods
+                          child: false
+                              ? SupaMagicAuth(
+                                  redirectUrl: 'ar.com.sumit://auth-callback',
+                                  onSuccess: (response) {
+                                    logger.i(
+                                      'Magic auth complete: $response',
+                                    );
+                                  },
+                                  onError: (error) {
+                                    logger.e('Error: $error');
+                                  },
+                                )
+                              : SupaEmailAuth(
+                                  redirectTo: 'ar.com.sumit://auth-callback',
+                                  onSignInComplete: (response) {
+                                    logger.i('Sign in complete: $response');
+                                    handleSignIn(response);
+                                  },
+                                  onSignUpComplete: (response) {
+                                    logger.i('Sign up complete');
+                                    ScaffoldMessenger.of(
+                                      context,
+                                    ).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          context.translate(
+                                            'signup_complete',
                                           ),
                                         ),
-                                      );
-                                    },
-                                    onError: (error) {
-                                      logger.e('Error: $error');
-                                    },
-                                    onPasswordResetEmailSent: () {
-                                      logger.i('Password reset email sent');
-                                    },
-                                    prefixIconEmail: null,
-                                    prefixIconPassword: null,
-                                  ),
+                                      ),
+                                    );
+                                  },
+                                  onError: (error) {
+                                    logger.e('Error: $error');
+                                  },
+                                  onPasswordResetEmailSent: () {
+                                    logger.i('Password reset email sent');
+                                  },
+                                  prefixIconEmail: null,
+                                  prefixIconPassword: null,
+                                ),
                         ),
                       ),
                     ],
