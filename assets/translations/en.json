@@ -63,14 +63,14 @@
             "created_successfully": "Group created successfully!",
             "invite_link_copied": "Invite link copied to clipboard",
             "group_created": "Group Created!",
-            "share_invite": "Share the invite link with your friends to start sharing expenses",
-            "copy_invite": "Copy Invite Link",
+            "share_invite": "Share the invite code with your friends to start sharing expenses",
+            "copy_invite": "Copy Invite Code",
             "share_button": "Share Invite",
             "share_subject": "Join my group '{group_name}' on Sumit",
-            "share_message": "Join the '{group_name}' group on Sumit and start sharing your expenses! Click the link below to join:",
-            "copied_to_clipboard": "Invite link copied to clipboard",
-            "copy_error": "Failed to copy invite link",
-            "copy_button": "Copy Link"
+            "share_message": "Join the '{group_name}' group on Sumit and start sharing your expenses! Use this invite code to join:",
+            "copied_to_clipboard": "Invite code copied to clipboard",
+            "copy_error": "Failed to copy invite code",
+            "copy_button": "Copy Code"
         },
         "group_join": {
             "title": "Join Group",
@@ -79,11 +79,28 @@
             "cancel_button": "Cancel",
             "back_to_home": "Back to Home",
             "joined_successfully": "Successfully joined the group!",
+            "invalid_code": "Invalid Invite Code",
             "error": {
                 "group_not_found": "Group not found",
                 "already_member": "You are already a member of this group",
                 "user_not_found": "User not found"
             }
+        },
+        "group_invite": {
+            "title": "Join Group",
+            "join_group": "Join this group?",
+            "already_member": "You are already a member of this group",
+            "joined_successfully": "Successfully joined the group!",
+            "invalid_code": "Invalid Invite Code",
+            "join_button": "Join Now",
+            "back_to_home": "Return Home",
+            "code_label": "Invite Code",
+            "code_hint": "Enter the invite code",
+            "code_required": "Please enter an invite code",
+            "join_error": "Failed to join the group. Please try again."
+        },
+        "error": {
+            "not_authenticated": "User not authenticated"
         }
     },
     "display": {
@@ -231,9 +248,15 @@
     "home": {
         "title": "Home"
     },
+    "common": {
+        "retry": "Retry",
+        "search": "Search",
+        "error_occurred": "An error occurred"
+    },
     "groups": {
         "title": "My Groups",
         "empty": "You haven't joined any groups yet",
-        "create": "Create a Group"
+        "create": "Create a Group",
+        "join_existing": "Join Existing Group"
     }
 }

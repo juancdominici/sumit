@@ -63,14 +63,14 @@
             "created_successfully": "¡Grupo creado exitosamente!",
             "invite_link_copied": "Enlace de invitación copiado al portapapeles",
             "group_created": "¡Grupo Creado!",
-            "share_invite": "Comparte el enlace de invitación con tus amigos para comenzar a compartir gastos",
-            "copy_invite": "Copiar Enlace de Invitación",
+            "share_invite": "Comparte el código de invitación con tus amigos para comenzar a compartir gastos",
+            "copy_invite": "Copiar Código de Invitación",
             "share_button": "Compartir Invitación",
             "share_subject": "Únete a mi grupo '{group_name}' en Sumit",
-            "share_message": "¡Únete al grupo '{group_name}' en Sumit y comienza a compartir tus gastos! Haz clic en el enlace de abajo para unirte:",
-            "copied_to_clipboard": "Enlace de invitación copiado al portapapeles",
-            "copy_error": "Error al copiar el enlace de invitación",
-            "copy_button": "Copiar Enlace"
+            "share_message": "¡Únete al grupo '{group_name}' en Sumit y comienza a compartir tus gastos! Usa este código de invitación para unirte:",
+            "copied_to_clipboard": "Código de invitación copiado al portapapeles",
+            "copy_error": "Error al copiar el código de invitación",
+            "copy_button": "Copiar Código"
         },
         "group_join": {
             "title": "Unirse al Grupo",
@@ -79,11 +79,28 @@
             "cancel_button": "Cancelar",
             "back_to_home": "Volver al Inicio",
             "joined_successfully": "¡Te has unido al grupo exitosamente!",
+            "invalid_code": "Código de Invitación Inválido",
             "error": {
                 "group_not_found": "Grupo no encontrado",
                 "already_member": "Ya eres miembro de este grupo",
                 "user_not_found": "Usuario no encontrado"
             }
+        },
+        "group_invite": {
+            "title": "Unirse al Grupo",
+            "join_group": "¿Unirse a este grupo?",
+            "already_member": "Ya eres miembro de este grupo",
+            "joined_successfully": "¡Te has unido al grupo exitosamente!",
+            "invalid_code": "Código de Invitación Inválido",
+            "join_button": "Unirse Ahora",
+            "back_to_home": "Volver al Inicio",
+            "code_label": "Código de Invitación",
+            "code_hint": "Ingresa el código de invitación",
+            "code_required": "Por favor ingresa un código de invitación",
+            "join_error": "Error al unirse al grupo. Por favor, intenta de nuevo."
+        },
+        "error": {
+            "not_authenticated": "Usuario no autenticado"
         }
     },
     "display": {
@@ -231,9 +248,15 @@
     "home": {
         "title": "Inicio"
     },
+    "common": {
+        "retry": "Reintentar",
+        "search": "Buscar",
+        "error_occurred": "Ha ocurrido un error"
+    },
     "groups": {
         "title": "Mis Grupos",
         "empty": "No te has unido a ningún grupo todavía",
-        "create": "Crear un Grupo"
+        "create": "Crear un Grupo",
+        "join_existing": "Unirse a un Grupo Existente"
     }
 }

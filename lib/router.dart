@@ -23,16 +23,7 @@ final router = GoRouter(
     if (uri.toString().startsWith('ar.com.sumit')) {
       if (uri.toString().contains('/auth-callback')) {
         return '/auth-callback';
-      } else if (uri.toString().contains('/join/')) {
-        final groupId = uri.pathSegments.last;
-        return '/join/$groupId';
       }
-    }
-
-    // Handle web URLs for group joins
-    if (uri.host == 'sumit.app' && uri.path.startsWith('/join/')) {
-      final groupId = uri.pathSegments.last;
-      return '/join/$groupId';
     }
 
     // Standard authentication flow
@@ -109,11 +100,6 @@ final router = GoRouter(
     GoRoute(
       path: '/group-creation',
       builder: (context, state) => const GroupCreationScreen(),
-    ),
-    GoRoute(
-      path: '/join/:groupId',
-      builder: (context, state) =>
-          GroupJoinScreen(groupId: state.pathParameters['groupId']!),
     ),
     GoRoute(
       path: '/groups',

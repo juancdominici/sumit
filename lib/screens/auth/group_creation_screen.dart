@@ -5,6 +5,7 @@ import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:sumit/state/module.dart';
 import 'package:sumit/services/translations_service.dart';
+import 'package:sumit/services/encryption_service.dart';
 import 'package:sumit/models/group.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +28,7 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
 
   // Form fields
   final _groupNameController = TextEditingController();
-  String _inviteLink = '';
+  String _inviteCode = '';
 
   @override
   void initState() {
@@ -102,8 +103,8 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
 
       await supabase.from('group_members').insert(memberData);
 
-      // Generate invite link with a proper URL format
-      _inviteLink = 'https://sumit.app/join/${group.id}';
+      // Encrypt the group's UUID as the invite code
+      _inviteCode = EncryptionService.encryptGroupId(group.id);
 
       // Update user preferences to mark group as created
       final settingsState = June.getState(() => SettingsState());
@@ -323,7 +324,7 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
                                     children: [
                                       ShareButton(
                                         groupName: _groupNameController.text,
-                                        inviteLink: _inviteLink,
+                                        inviteCode: _inviteCode,
                                       ),
                                     ],
                                   ),
@@ -457,12 +458,12 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
 
 class ShareButton extends StatefulWidget {
   final String groupName;
-  final String inviteLink;
+  final String inviteCode;
 
   const ShareButton({
     super.key,
     required this.groupName,
-    required this.inviteLink,
+    required this.inviteCode,
   });
 
   @override
@@ -480,7 +481,7 @@ class _ShareButtonState extends State<ShareButton> {
 
     try {
       await Clipboard.setData(
-        ClipboardData(text: '$message\n\n${widget.inviteLink}'),
+        ClipboardData(text: '$message\n\n${widget.inviteCode}'),
       );
       if (!mounted) return;
 
