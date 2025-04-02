@@ -236,6 +236,7 @@
         "show_list": "Mostrar lista de registros",
         "show_home": "Mostrar inicio",
         "empty": "No se encontraron registros.\n¡Comenzá añadiendo algunas transacciones!",
+        "no_records_in_group": "No se encontraron registros en este grupo.\nAgrega transacciones a este grupo para verlas aquí.",
         "no_tag": "Sin etiqueta",
         "filter": "Filtrar por fecha:",
         "reset_filter": "Reiniciar filtro",
@@ -283,7 +284,7 @@
         "rename": "Renombrar Grupo",
         "delete": "Eliminar Grupo",
         "select_group": "Seleccionar Grupo",
-        "no_group": "Personal (Sin Grupo)"
+        "no_group": "Personal (tú)"
     },
     "app": {
         "title": "Sumit"

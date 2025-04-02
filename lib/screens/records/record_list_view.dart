@@ -6,6 +6,7 @@ import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RecordListView extends StatefulWidget {
   const RecordListView({super.key});
@@ -20,16 +21,72 @@ class _RecordListViewState extends State<RecordListView>
   final Map<String, bool> _expandedFutureSections = {};
   final Map<String, AnimationController> _animationControllers = {};
   final Map<String, Animation<double>> _animations = {};
+  late TabController _tabController;
+  List<Group> _groups = [];
+  bool _isLoadingGroups = true;
+  String? _selectedGroupId;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    _loadGroups();
+  }
+
+  Future<void> _loadGroups() async {
+    setState(() {
+      _isLoadingGroups = true;
+    });
+
+    try {
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      if (userId == null) return;
+
+      final response = await Supabase.instance.client
+          .from('group_members')
+          .select('group:groups(*)')
+          .eq('user_id', userId);
+
+      _groups =
+          (response as List)
+              .map(
+                (item) => Group.fromJson(item['group'] as Map<String, dynamic>),
+              )
+              .where((group) => group.deleted == null)
+              .toList();
+
+      // Initialize the tab controller with the correct number of tabs (Personal + groups)
+      _tabController = TabController(length: _groups.length + 1, vsync: this);
+      _tabController.addListener(_handleTabChange);
+    } catch (e) {
+      logger.e('Error loading groups: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingGroups = false;
+        });
+      }
+    }
+  }
+
+  void _handleTabChange() {
+    if (!_tabController.indexIsChanging) {
+      setState(() {
+        if (_tabController.index == 0) {
+          // Personal tab
+          _selectedGroupId = null;
+        } else {
+          // Group tab
+          _selectedGroupId = _groups[_tabController.index - 1].id;
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _tabController.dispose();
     // Dispose all animation controllers
     for (final controller in _animationControllers.values) {
       controller.dispose();
@@ -50,10 +107,11 @@ class _RecordListViewState extends State<RecordListView>
     return JuneBuilder(
       () => RecordsState(),
       builder: (recordsState) {
-        if (recordsState.isLoading) {
+        if (_isLoadingGroups || recordsState.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        // If there are no records at all in the app
         if (recordsState.records.isEmpty) {
           return Center(
             child: Column(
@@ -89,58 +147,133 @@ class _RecordListViewState extends State<RecordListView>
           );
         }
 
+        // Filter records based on the selected group tab
+        final filteredRecords =
+            _selectedGroupId == null
+                ? recordsState.records.where((r) => r.groupId == null).toList()
+                : recordsState.records
+                    .where((r) => r.groupId == _selectedGroupId)
+                    .toList();
+
         final settingsState = June.getState(() => SettingsState());
         final selectedCurrency = settingsState.selectedCurrency;
         final currencySymbol = selectedCurrency?.currency ?? '\$';
         final currencyFormatter = NumberFormat('#,##0.00 $currencySymbol');
 
-        final recordsByMonth = recordsState.getRecordsByMonth(
-          locale: Localizations.localeOf(context),
+        final recordsByMonth = _getFilteredRecordsByMonth(
+          filteredRecords,
+          Localizations.localeOf(context),
         );
-        logger.d('recordsByMonth: $recordsByMonth');
+
         final months = recordsByMonth.keys.toList();
 
         return Column(
           children: [
+            TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              labelColor: Theme.of(context).colorScheme.primary,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              unselectedLabelColor: Theme.of(
+                context,
+              ).colorScheme.onSurface.withOpacity(0.7),
+              tabs: [
+                Tab(text: context.translate('groups.no_group')),
+                ..._groups.map((group) => Tab(text: group.groupName)),
+              ],
+            ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
                   await recordsState.fetchRecords();
                 },
-                child: ListView.builder(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(top: 8.0),
-                  itemCount:
-                      months.length + (recordsState.isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, monthIndex) {
-                    if (monthIndex == months.length) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: CircularProgressIndicator(),
+                child:
+                    filteredRecords.isEmpty
+                        ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.subject_outlined,
+                                size: 64,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.secondary.withOpacity(0.5),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                context.translate(
+                                  'records.no_records_in_group',
+                                ),
+                                style: Theme.of(context).textTheme.titleMedium,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        )
+                        : ListView.builder(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.only(top: 8.0),
+                          itemCount:
+                              months.length +
+                              (recordsState.isLoadingMore ? 1 : 0),
+                          itemBuilder: (context, monthIndex) {
+                            if (monthIndex == months.length) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+
+                            final month = months[monthIndex];
+                            final monthRecords = recordsByMonth[month]!;
+
+                            return _buildMonthSection(
+                              context,
+                              month,
+                              monthRecords,
+                              currencyFormatter,
+                              recordsState,
+                            );
+                          },
                         ),
-                      );
-                    }
-
-                    final month = months[monthIndex];
-                    final monthRecords = recordsByMonth[month]!;
-
-                    return _buildMonthSection(
-                      context,
-                      month,
-                      monthRecords,
-                      currencyFormatter,
-                      recordsState,
-                    );
-                  },
-                ),
               ),
             ),
           ],
         );
       },
     );
+  }
+
+  // Helper method to filter records by group and organize by month
+  Map<String, List<Record>> _getFilteredRecordsByMonth(
+    List<Record> records,
+    Locale locale,
+  ) {
+    final Map<String, List<Record>> groupedRecords = {};
+    final String languageCode = locale.languageCode;
+
+    // Filter out deleted records
+    final activeRecords = records.where((record) => !record.isDeleted).toList();
+
+    for (var record in activeRecords) {
+      final monthYear = DateFormat(
+        'MMMM yyyy',
+        languageCode,
+      ).format(record.date);
+
+      if (!groupedRecords.containsKey(monthYear)) {
+        groupedRecords[monthYear] = [];
+      }
+
+      groupedRecords[monthYear]!.add(record);
+    }
+
+    return groupedRecords;
   }
 
   Widget _buildSlidableRecord(

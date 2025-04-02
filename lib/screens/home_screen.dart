@@ -51,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         toolbarHeight: 100,
         actionsPadding: const EdgeInsets.only(right: 24.0),
+        title:
+            _showRecordsList ? Text(context.translate("records.title")) : null,
         actions: [
           SpeedDial(
             icon: Icons.menu,

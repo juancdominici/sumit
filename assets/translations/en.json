@@ -236,6 +236,7 @@
         "show_list": "Show records list",
         "show_home": "Show home",
         "empty": "No records found.\nStart by adding some transactions first!",
+        "no_records_in_group": "No records found in this group.\nAdd transactions to this group to see them here.",
         "no_tag": "No tag",
         "filter": "Filter by date:",
         "reset_filter": "Reset filter",
@@ -283,7 +284,7 @@
         "rename": "Rename Group",
         "delete": "Delete Group",
         "select_group": "Select Group",
-        "no_group": "Personal (No Group)"
+        "no_group": "Personal (you)"
     },
     "app": {
         "title": "Sumit"
