@@ -244,23 +244,25 @@ class _DisplayState extends State<Display> {
       ),
       child: Stack(
         children: [
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.35 / 3,
-            right: 42,
-            child: Text(
-              displayState.operator == "-"
-                  ? context.translate('display.spending')
-                  : context.translate('display.earned'),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color:
-                    displayState.operator == "-"
-                        ? Colors.red.shade300
-                        : Colors.green.shade300,
+          if (displayState.displayValue == "0" ||
+              displayState.displayValue.isNotEmpty)
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.35 / 3,
+              right: 42,
+              child: Text(
+                displayState.operator == "-"
+                    ? context.translate('display.spending')
+                    : context.translate('display.earned'),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color:
+                      displayState.operator == "-"
+                          ? Colors.red.shade300
+                          : Colors.green.shade300,
+                ),
               ),
             ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
