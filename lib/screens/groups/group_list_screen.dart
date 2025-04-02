@@ -437,7 +437,15 @@ class _GroupListScreenState extends State<GroupListScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
-                  onPressed: () => router.push('/group-creation'),
+                  onPressed: () async {
+                    final result = await router.push(
+                      '/group-creation?fromList=true',
+                    );
+                    // If a group was created (result is true), refresh the list
+                    if (result == true) {
+                      _loadGroups();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(

@@ -98,6 +98,7 @@ class DisplayState extends JuneState {
     showRecurringExpenseInput = false;
     recurringExpenseType = RecurringType.none;
     date = DateTime.now();
+    groupId = null;
     setState();
   }
 

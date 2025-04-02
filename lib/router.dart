@@ -99,7 +99,10 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/group-creation',
-      builder: (context, state) => const GroupCreationScreen(),
+      builder: (context, state) {
+        final fromList = state.uri.queryParameters['fromList'] == 'true';
+        return GroupCreationScreen(fromGroupList: fromList);
+      },
     ),
     GoRoute(
       path: '/groups',

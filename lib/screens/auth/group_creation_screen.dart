@@ -11,7 +11,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
 
 class GroupCreationScreen extends StatefulWidget {
-  const GroupCreationScreen({super.key});
+  final bool fromGroupList;
+
+  const GroupCreationScreen({super.key, this.fromGroupList = false});
 
   @override
   GroupCreationScreenState createState() => GroupCreationScreenState();
@@ -125,6 +127,15 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
         _groupCreated = true;
         _isLoading = false;
       });
+
+      // If coming from group list, don't show the success UI, just return to the list
+      if (widget.fromGroupList) {
+        if (mounted) {
+          // Pop back to the group list screen with a result that indicates success
+          Navigator.pop(context, true);
+        }
+        return;
+      }
     } catch (e) {
       logger.e(e);
       if (mounted) {
@@ -410,8 +421,8 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
                                 ),
                           ),
                         const SizedBox(height: 16),
-                        // Skip Button (only shown before group creation)
-                        if (!_groupCreated)
+                        // Skip Button (only shown before group creation and not from group list)
+                        if (!_groupCreated && !widget.fromGroupList)
                           JuneBuilder(
                             () => TranslationsService(),
                             builder:
