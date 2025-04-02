@@ -425,9 +425,6 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                             ],
                                           ],
                                     ),
-                            onTap: () {
-                              // TODO: Navigate to group details
-                            },
                           );
                         },
                       ),
