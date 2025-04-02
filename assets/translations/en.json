@@ -249,14 +249,29 @@
         "title": "Home"
     },
     "common": {
+        "error_occurred": "An error occurred",
         "retry": "Retry",
-        "search": "Search",
-        "error_occurred": "An error occurred"
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "save": "Save"
     },
     "groups": {
-        "title": "My Groups",
-        "empty": "You haven't joined any groups yet",
-        "create": "Create a Group",
-        "join_existing": "Join Existing Group"
+        "title": "Groups",
+        "empty": "You haven't joined any groups yet.\nCreate or join a group to start sharing expenses!",
+        "create": "Create Group",
+        "join_existing": "Join Existing Group",
+        "owner": "Owner",
+        "member": "Member",
+        "deleted_status": "Deleted",
+        "invite_code_copied": "Invite code copied to clipboard",
+        "delete_confirmation_title": "Delete Group",
+        "delete_confirmation_message": "Are you sure you want to delete this group? This action cannot be undone.",
+        "deleted": "Group deleted successfully",
+        "rename_title": "Rename Group",
+        "name": "Group Name",
+        "renamed": "Group renamed successfully",
+        "copy_invite": "Copy Invite Code",
+        "rename": "Rename Group",
+        "delete": "Delete Group"
     }
 }

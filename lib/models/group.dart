@@ -1,20 +1,32 @@
 class Group {
-  Group({required this.id, required this.groupName, required this.groupOwner});
+  Group({
+    required this.id,
+    required this.groupName,
+    required this.groupOwner,
+    this.deleted,
+  });
 
   final String id;
   final String groupName;
   final String groupOwner;
+  final DateTime? deleted;
 
   factory Group.fromJson(Map<String, dynamic> json) {
     return Group(
       id: json['id'],
       groupName: json['group_name'],
       groupOwner: json['group_owner'],
+      deleted: json['deleted'] != null ? DateTime.parse(json['deleted']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'group_name': groupName, 'group_owner': groupOwner};
+    return {
+      'id': id,
+      'group_name': groupName,
+      'group_owner': groupOwner,
+      'deleted': deleted?.toIso8601String(),
+    };
   }
 }
 

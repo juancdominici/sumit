@@ -249,14 +249,29 @@
         "title": "Inicio"
     },
     "common": {
+        "error_occurred": "Ocurrió un error",
         "retry": "Reintentar",
-        "search": "Buscar",
-        "error_occurred": "Ha ocurrido un error"
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "save": "Guardar"
     },
     "groups": {
-        "title": "Mis Grupos",
-        "empty": "No te has unido a ningún grupo todavía",
-        "create": "Crear un Grupo",
-        "join_existing": "Unirse a un Grupo Existente"
+        "title": "Grupos",
+        "empty": "Aún no te has unido a ningún grupo.\n¡Crea o únete a un grupo para comenzar a compartir gastos!",
+        "create": "Crear Grupo",
+        "join_existing": "Unirse a Grupo Existente",
+        "owner": "Propietario",
+        "member": "Miembro",
+        "deleted_status": "Eliminado",
+        "invite_code_copied": "Código de invitación copiado al portapapeles",
+        "delete_confirmation_title": "Eliminar Grupo",
+        "delete_confirmation_message": "¿Estás seguro de que quieres eliminar este grupo? Esta acción no se puede deshacer.",
+        "deleted": "Grupo eliminado exitosamente",
+        "rename_title": "Renombrar Grupo",
+        "name": "Nombre del Grupo",
+        "renamed": "Grupo renombrado exitosamente",
+        "copy_invite": "Copiar Código de Invitación",
+        "rename": "Renombrar Grupo",
+        "delete": "Eliminar Grupo"
     }
 }
