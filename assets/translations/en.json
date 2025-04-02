@@ -273,6 +273,8 @@
         "renamed": "Group renamed successfully",
         "copy_invite": "Copy Invite Code",
         "rename": "Rename Group",
-        "delete": "Delete Group"
+        "delete": "Delete Group",
+        "select_group": "Select Group",
+        "no_group": "Personal (No Group)"
     }
 }

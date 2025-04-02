@@ -273,6 +273,8 @@
         "renamed": "Grupo renombrado exitosamente",
         "copy_invite": "Copiar Código de Invitación",
         "rename": "Renombrar Grupo",
-        "delete": "Eliminar Grupo"
+        "delete": "Eliminar Grupo",
+        "select_group": "Seleccionar Grupo",
+        "no_group": "Personal (Sin Grupo)"
     }
 }

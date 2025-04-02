@@ -9,6 +9,7 @@ class Record {
   final String recurringType;
   final String userId;
   final DateTime? deleted;
+  final String? groupId;
 
   Record({
     required this.id,
@@ -19,6 +20,7 @@ class Record {
     required this.recurringType,
     required this.userId,
     this.deleted,
+    this.groupId,
   });
 
   factory Record.fromMap(Map<String, dynamic> map) {
@@ -46,6 +48,7 @@ class Record {
       recurringType: map['recurring_type'] as String? ?? 'none',
       userId: map['user_id'].toString(),
       deleted: deletedDate,
+      groupId: map['group_id']?.toString(),
     );
   }
 
@@ -59,6 +62,7 @@ class Record {
       'recurring_type': recurringType,
       'user_id': userId,
       'deleted': deleted?.toUtc().toString(),
+      if (groupId != null) 'group_id': groupId,
     };
   }
 
@@ -71,6 +75,7 @@ class Record {
     String? recurringType,
     String? userId,
     DateTime? deleted,
+    String? groupId,
   }) {
     return Record(
       id: id ?? this.id,
@@ -81,6 +86,7 @@ class Record {
       recurringType: recurringType ?? this.recurringType,
       userId: userId ?? this.userId,
       deleted: deleted ?? this.deleted,
+      groupId: groupId ?? this.groupId,
     );
   }
 

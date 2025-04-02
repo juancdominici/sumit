@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:june/june.dart';
 import 'package:sumit/state/module.dart';
 import 'package:sumit/models/module.dart';
+import 'package:sumit/models/group.dart';
 import 'package:intl/intl.dart';
 import 'package:sumit/utils/translations_extension.dart';
+import 'package:sumit/utils.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Display extends StatefulWidget {
   final Function openCalendar;
@@ -19,11 +22,63 @@ class _DisplayState extends State<Display> {
   final TextEditingController _tagController = TextEditingController();
   final TextEditingController _displayController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  bool _isLoadingGroups = false;
+  List<Group> _groups = [];
+  String? _selectedGroupName;
 
   @override
   void initState() {
     super.initState();
     _tagController.addListener(_updateTagInState);
+    _loadGroups();
+  }
+
+  Future<void> _loadGroups() async {
+    setState(() {
+      _isLoadingGroups = true;
+    });
+
+    try {
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      if (userId == null) return;
+
+      final response = await Supabase.instance.client
+          .from('group_members')
+          .select('group:groups(*)')
+          .eq('user_id', userId);
+
+      _groups =
+          (response as List)
+              .map(
+                (item) => Group.fromJson(item['group'] as Map<String, dynamic>),
+              )
+              .where((group) => group.deleted == null)
+              .toList();
+
+      // Update selected group name if there's a groupId selected
+      _updateSelectedGroupName();
+    } catch (e) {
+      logger.e('Error loading groups: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingGroups = false;
+        });
+      }
+    }
+  }
+
+  void _updateSelectedGroupName() {
+    final displayState = June.getState(() => DisplayState());
+    if (displayState.groupId != null && _groups.isNotEmpty) {
+      final selectedGroup = _groups.firstWhere(
+        (group) => group.id == displayState.groupId,
+        orElse: () => _groups[0],
+      );
+      _selectedGroupName = selectedGroup.groupName;
+    } else {
+      _selectedGroupName = null;
+    }
   }
 
   void _updateTagInState() {
@@ -168,6 +223,26 @@ class _DisplayState extends State<Display> {
     }
   }
 
+  void _showGroupSelectionSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => GroupSelectionSheet(
+            groups: _groups,
+            onGroupSelected: (groupId) {
+              final displayState = June.getState(() => DisplayState());
+              displayState.setGroupId(groupId);
+              setState(() {
+                _updateSelectedGroupName();
+              });
+            },
+            selectedGroupId: June.getState(() => DisplayState()).groupId,
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     DisplayState displayState = June.getState(() => DisplayState());
@@ -198,9 +273,10 @@ class _DisplayState extends State<Display> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: displayState.operator == "-"
-                    ? Colors.red.shade300
-                    : Colors.green.shade300,
+                color:
+                    displayState.operator == "-"
+                        ? Colors.red.shade300
+                        : Colors.green.shade300,
               ),
             ),
           ),
@@ -239,8 +315,8 @@ class _DisplayState extends State<Display> {
                                     return text.isEmpty
                                         ? newValue
                                         : double.tryParse(text) == null
-                                            ? oldValue
-                                            : newValue;
+                                        ? oldValue
+                                        : newValue;
                                   }),
                                 ],
                                 onChanged: (value) {
@@ -253,7 +329,8 @@ class _DisplayState extends State<Display> {
                                 keyboardType: TextInputType.none,
                                 style: TextStyle(
                                   fontSize: 48,
-                                  color: Theme.of(
+                                  color:
+                                      Theme.of(
                                         context,
                                       ).textTheme.bodyMedium?.color ??
                                       Colors.black54,
@@ -272,7 +349,8 @@ class _DisplayState extends State<Display> {
                                   ),
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(
+                                    color:
+                                        Theme.of(
                                           context,
                                         ).textTheme.bodyMedium?.color ??
                                         Colors.black38,
@@ -293,33 +371,36 @@ class _DisplayState extends State<Display> {
                       duration: Duration(milliseconds: 300),
                       width: _isExpanded ? 200.0 : 0.0,
                       curve: Curves.easeInOut,
-                      child: _isExpanded
-                          ? TextField(
-                              textAlign: TextAlign.end,
-                              maxLength: 20,
-                              focusNode: _focusNode,
-                              controller: _tagController,
-                              decoration: InputDecoration(
-                                hintText: context.translate('display.tag'),
-                                hintStyle: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium?.color,
+                      child:
+                          _isExpanded
+                              ? TextField(
+                                textAlign: TextAlign.end,
+                                maxLength: 20,
+                                focusNode: _focusNode,
+                                controller: _tagController,
+                                decoration: InputDecoration(
+                                  hintText: context.translate('display.tag'),
+                                  hintStyle: TextStyle(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
+                                  ),
+                                  counterStyle: TextStyle(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(right: 5),
+                                  isDense: true,
                                 ),
-                                counterStyle: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium?.color,
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(right: 5),
-                                isDense: true,
-                              ),
-                              onSubmitted: (value) {
-                                FocusScope.of(context).unfocus();
-                              },
-                            )
-                          : null,
+                                onSubmitted: (value) {
+                                  FocusScope.of(context).unfocus();
+                                },
+                              )
+                              : null,
                     ),
                     IconButton(
                       icon: Icon(
@@ -357,11 +438,143 @@ class _DisplayState extends State<Display> {
                           ),
                       ],
                     ),
+                    Stack(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.group,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          iconSize: 32,
+                          onPressed: _showGroupSelectionSheet,
+                        ),
+                        if (_selectedGroupName != null)
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class GroupSelectionSheet extends StatelessWidget {
+  final List<Group> groups;
+  final Function(String?) onGroupSelected;
+  final String? selectedGroupId;
+
+  const GroupSelectionSheet({
+    super.key,
+    required this.groups,
+    required this.onGroupSelected,
+    this.selectedGroupId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Text(
+                  context.translate('groups.select_group'),
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+          if (groups.isEmpty)
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.group_off,
+                    size: 64,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    context.translate('groups.empty'),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            )
+          else
+            ListView(
+              shrinkWrap: true,
+              children: [
+                // Option to deselect group
+                ListTile(
+                  leading: Icon(
+                    Icons.person,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                  title: Text(context.translate('groups.no_group')),
+                  selected: selectedGroupId == null,
+                  selectedTileColor:
+                      Theme.of(context).colorScheme.surfaceVariant,
+                  onTap: () {
+                    onGroupSelected(null);
+                    Navigator.pop(context);
+                  },
+                ),
+                ...groups.map((group) {
+                  return ListTile(
+                    leading: Icon(
+                      Icons.group,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                    title: Text(group.groupName),
+                    selected: group.id == selectedGroupId,
+                    selectedTileColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
+                    onTap: () {
+                      onGroupSelected(group.id);
+                      Navigator.pop(context);
+                    },
+                  );
+                }).toList(),
+              ],
+            ),
         ],
       ),
     );

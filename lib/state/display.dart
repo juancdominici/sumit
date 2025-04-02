@@ -14,6 +14,7 @@ class DisplayState extends JuneState {
   bool showRecurringExpenseInput = false;
   RecurringType recurringExpenseType = RecurringType.none;
   DateTime date = DateTime.now();
+  String? groupId;
 
   DisplayState() {
     _loadDefaultOperator();
@@ -124,9 +125,15 @@ class DisplayState extends JuneState {
       "is_recurring": isRecurringExpense,
       "recurring_type": recurringExpenseType.value,
       "user_id": userId,
+      if (groupId != null) "group_id": groupId,
     };
 
     return await Supabase.instance.client.from("records").insert(recordData);
+  }
+
+  void setGroupId(String? id) {
+    groupId = id;
+    setState();
   }
 }
 
