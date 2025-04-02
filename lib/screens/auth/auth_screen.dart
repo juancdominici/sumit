@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:june/june.dart';
+import 'package:sumit/router.dart';
 import 'package:sumit/state/module.dart';
 import 'package:sumit/utils.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
@@ -193,6 +195,8 @@ class _AuthScreenState extends State<AuthScreen>
                                           ),
                                         ),
                                       );
+                                      // Redirect to the sign in screen
+                                      router.push('/auth');
                                     },
                                     onError: (error) {
                                       logger.e('Error: $error');
