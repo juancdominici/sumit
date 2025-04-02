@@ -239,6 +239,7 @@
         "cancel": "Cancel",
         "deleted": "Record deleted",
         "undo": "Undo",
+        "refresh": "Refresh",
         "delete_confirmation_title": "Delete Record",
         "delete_confirmation_message": "Are you sure you want to delete this record? This action cannot be undone.",
         "delete_recurring_title": "Delete Recurring Record",

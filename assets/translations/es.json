@@ -239,6 +239,7 @@
         "cancel": "Cancelar",
         "deleted": "Registro eliminado",
         "undo": "Deshacer",
+        "refresh": "Refrescar",
         "delete_confirmation_title": "Eliminar Registro",
         "delete_confirmation_message": "¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.",
         "delete_recurring_title": "Eliminar Registro Recurrente",

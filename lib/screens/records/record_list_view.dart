@@ -70,6 +70,20 @@ class _RecordListViewState extends State<RecordListView>
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: () => recordsState.fetchRecords(),
+                  icon: const Icon(Icons.refresh),
+                  label: Text(context.translate('records.refresh')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -88,70 +102,39 @@ class _RecordListViewState extends State<RecordListView>
 
         return Column(
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-              child: Row(
-                children: [
-                  Text(context.translate('records.filter')),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: const Icon(Icons.calendar_month),
-                    onPressed: () async {
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime.now().add(const Duration(days: 365)),
-                        initialDatePickerMode: DatePickerMode.year,
-                        locale: Localizations.localeOf(context),
-                      );
-                      if (date != null) {
-                        recordsState.filterByDate(date);
-                      }
-                    },
-                  ),
-                  const Spacer(),
-                  TextButton.icon(
-                    icon: const Icon(Icons.refresh),
-                    label: Text(context.translate('records.reset_filter')),
-                    onPressed: () => recordsState.fetchRecords(),
-                  ),
-                ],
-              ),
-            ),
             Expanded(
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                itemCount: months.length + (recordsState.isLoadingMore ? 1 : 0),
-                itemBuilder: (context, monthIndex) {
-                  if (monthIndex == months.length) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-
-                  final month = months[monthIndex];
-                  final monthRecords = recordsByMonth[month]!;
-
-                  return _buildMonthSection(
-                    context,
-                    month,
-                    monthRecords,
-                    currencyFormatter,
-                    recordsState,
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await recordsState.fetchRecords();
                 },
+                child: ListView.builder(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(top: 8.0),
+                  itemCount:
+                      months.length + (recordsState.isLoadingMore ? 1 : 0),
+                  itemBuilder: (context, monthIndex) {
+                    if (monthIndex == months.length) {
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+
+                    final month = months[monthIndex];
+                    final monthRecords = recordsByMonth[month]!;
+
+                    return _buildMonthSection(
+                      context,
+                      month,
+                      monthRecords,
+                      currencyFormatter,
+                      recordsState,
+                    );
+                  },
+                ),
               ),
             ),
           ],
