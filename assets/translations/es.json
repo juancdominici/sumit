@@ -20,7 +20,9 @@
         "error": {
             "updateCurrency": "Error al actualizar la moneda: {error}",
             "updateLanguage": "Error al actualizar el idioma: {error}",
-            "updatePreferences": "Error al actualizar las preferencias: {error}"
+            "updatePreferences": "Error al actualizar las preferencias: {error}",
+            "loading_data": "Error al cargar datos de configuración: {error}",
+            "noCurrencies": "No hay monedas disponibles"
         },
         "retry": "Reintentar"
     },
@@ -115,6 +117,12 @@
             "last_month_day": "Último día del mes",
             "last_business_day": "Último día hábil del mes",
             "bi_weekly": "Quincenal, cada {day}"
+        },
+        "error": {
+            "value_zero": "El valor no puede ser 0"
+        },
+        "success": {
+            "record_added": "Registro agregado con éxito"
         }
     },
     "calendar": {
@@ -221,7 +229,7 @@
     },
     "keypad": {
         "success": "Registro agregado con éxito",
-        "error": "Error: {error}"
+        "error": "{error}"
     },
     "records": {
         "title": "Registros",
@@ -276,5 +284,8 @@
         "delete": "Eliminar Grupo",
         "select_group": "Seleccionar Grupo",
         "no_group": "Personal (Sin Grupo)"
+    },
+    "app": {
+        "title": "Sumit"
     }
 }

@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   settingsState.userPreferences.darkMode
                       ? ThemeMode.dark
                       : ThemeMode.light,
-              title: 'Sumit',
+              title: translationsService.translate('app.title'),
               debugShowCheckedModeBanner: false,
               routerConfig: appRouter,
               localizationsDelegates: const [

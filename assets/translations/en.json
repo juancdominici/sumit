@@ -20,7 +20,9 @@
         "error": {
             "updateCurrency": "Failed to update currency: {error}",
             "updateLanguage": "Failed to update language: {error}",
-            "updatePreferences": "Failed to update preferences: {error}"
+            "updatePreferences": "Failed to update preferences: {error}",
+            "loading_data": "Error loading settings data: {error}",
+            "noCurrencies": "No currencies available"
         },
         "retry": "Retry"
     },
@@ -115,6 +117,12 @@
             "last_month_day": "Last day of month",
             "last_business_day": "Last business day of month",
             "bi_weekly": "Every two weeks on {day}"
+        },
+        "error": {
+            "value_zero": "Value cannot be 0"
+        },
+        "success": {
+            "record_added": "Record added successfully"
         }
     },
     "calendar": {
@@ -221,7 +229,7 @@
     },
     "keypad": {
         "success": "Record added successfully",
-        "error": "Error: {error}"
+        "error": "{error}"
     },
     "records": {
         "title": "Records",
@@ -276,5 +284,8 @@
         "delete": "Delete Group",
         "select_group": "Select Group",
         "no_group": "Personal (No Group)"
+    },
+    "app": {
+        "title": "Sumit"
     }
 }

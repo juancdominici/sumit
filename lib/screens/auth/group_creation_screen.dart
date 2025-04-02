@@ -72,8 +72,8 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
     if (user == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('User not found!'),
+          SnackBar(
+            content: Text(context.translate('auth.error.user_not_found')),
             behavior: SnackBarBehavior.floating,
           ),
         );

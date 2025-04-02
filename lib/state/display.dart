@@ -3,6 +3,7 @@ import 'package:sumit/models/module.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sumit/services/translations_service.dart';
 
 class DisplayState extends JuneState {
   String displayValue = '';
@@ -105,7 +106,7 @@ class DisplayState extends JuneState {
   handleAddRecord() async {
     if (displayValue == '0') {
       throw DisplayError(
-        message: 'El valor no puede ser 0',
+        message: TranslationsService().translate('display.error.value_zero'),
         color: Colors.red.shade300,
       );
     }
@@ -114,7 +115,9 @@ class DisplayState extends JuneState {
 
     if (userId == null) {
       throw DisplayError(
-        message: 'User not authenticated',
+        message: TranslationsService().translate(
+          'auth.error.not_authenticated',
+        ),
         color: Colors.red.shade300,
       );
     }

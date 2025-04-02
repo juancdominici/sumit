@@ -74,8 +74,8 @@ class CalendarView extends StatelessWidget {
                           style: Theme.of(
                             context,
                           ).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                         const SizedBox(width: 4),
                         Icon(
@@ -138,8 +138,8 @@ class CalendarView extends StatelessWidget {
                         Localizations.localeOf(context).languageCode,
                       ).format(displayState.date),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                 ],
@@ -262,8 +262,8 @@ class CalendarView extends StatelessWidget {
                         Localizations.localeOf(context).languageCode,
                       ).format(displayState.date),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                 ],
@@ -274,11 +274,12 @@ class CalendarView extends StatelessWidget {
 
       case RecurringType.monthly:
         final currentDay = displayState.date.day;
-        final daysInMonth = DateTime(
-          displayState.date.year,
-          displayState.date.month + 1,
-          0,
-        ).day;
+        final daysInMonth =
+            DateTime(
+              displayState.date.year,
+              displayState.date.month + 1,
+              0,
+            ).day;
 
         return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -406,9 +407,10 @@ class CalendarView extends StatelessWidget {
                       if (value != null) {
                         final daysInNewMonth =
                             DateTime(displayState.date.year, value + 1, 0).day;
-                        final newDay = currentDay > daysInNewMonth
-                            ? daysInNewMonth
-                            : currentDay;
+                        final newDay =
+                            currentDay > daysInNewMonth
+                                ? daysInNewMonth
+                                : currentDay;
 
                         final newDate = DateTime(
                           displayState.date.year,
@@ -536,8 +538,8 @@ class CalendarView extends StatelessWidget {
                         Localizations.localeOf(context).languageCode,
                       ).format(displayState.date),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                 ],
@@ -638,37 +640,38 @@ class CalendarView extends StatelessWidget {
   Widget build(BuildContext context) {
     return JuneBuilder(
       () => DisplayState(),
-      builder: (displayState) => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: RecurringTypeSelector(
-                selectedType: displayState.recurringExpenseType,
-                onTypeSelected: (type) {
-                  displayState.recurringExpenseType = type;
-                  displayState.isRecurringExpense =
-                      (type != RecurringType.none);
-                  if (type == RecurringType.daily) {
-                  } else if (type == RecurringType.lastMonthDay ||
-                      type == RecurringType.lastBusinessDay ||
-                      type == RecurringType.monthly) {
-                    displayState.date = _adjustDateForRecurringType(
-                      displayState.date,
-                      type,
-                    );
-                  }
+      builder:
+          (displayState) => Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: RecurringTypeSelector(
+                    selectedType: displayState.recurringExpenseType,
+                    onTypeSelected: (type) {
+                      displayState.recurringExpenseType = type;
+                      displayState.isRecurringExpense =
+                          (type != RecurringType.none);
+                      if (type == RecurringType.daily) {
+                      } else if (type == RecurringType.lastMonthDay ||
+                          type == RecurringType.lastBusinessDay ||
+                          type == RecurringType.monthly) {
+                        displayState.date = _adjustDateForRecurringType(
+                          displayState.date,
+                          type,
+                        );
+                      }
 
-                  displayState.setState();
-                },
+                      displayState.setState();
+                    },
+                  ),
+                ),
               ),
-            ),
+              _buildDateSelector(displayState, context),
+            ],
           ),
-          _buildDateSelector(displayState, context),
-        ],
-      ),
     );
   }
 }
@@ -700,61 +703,65 @@ class RecurringTypeSelector extends StatelessWidget {
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.80,
             ),
-            builder: (context) => Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        context.translate('calendar.recurring.title'),
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: RecurringType.values
-                        .map(
-                          (type) => ListTile(
-                            title: Text(
-                              context.translate(
-                                'calendar.recurring.${type.name}.text',
-                              ),
-                              style: TextStyle(
-                                color: selectedType == type
-                                    ? Theme.of(
-                                        context,
-                                      ).colorScheme.primary
-                                    : null,
-                                fontWeight: selectedType == type
-                                    ? FontWeight.bold
-                                    : null,
-                              ),
-                            ),
-                            subtitle: Text(
-                              _getDescriptionForType(context, type),
-                            ),
-                            selected: selectedType == type,
-                            onTap: () {
-                              onTypeSelected(type);
-                              Navigator.pop(context);
-                            },
+            builder:
+                (context) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            context.translate('calendar.recurring.title'),
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
-                        )
-                        .toList(),
-                  ),
+                          const Spacer(),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children:
+                            RecurringType.values
+                                .map(
+                                  (type) => ListTile(
+                                    title: Text(
+                                      context.translate(
+                                        'calendar.recurring.${type.name}.text',
+                                      ),
+                                      style: TextStyle(
+                                        color:
+                                            selectedType == type
+                                                ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                                : null,
+                                        fontWeight:
+                                            selectedType == type
+                                                ? FontWeight.bold
+                                                : null,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      _getDescriptionForType(context, type),
+                                    ),
+                                    selected: selectedType == type,
+                                    onTap: () {
+                                      onTypeSelected(type);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           );
         },
         child: Padding(
@@ -767,18 +774,20 @@ class RecurringTypeSelector extends StatelessWidget {
                   'calendar.recurring.${selectedType.name}.text',
                 ),
                 style: TextStyle(
-                  color: selectedType == RecurringType.none
-                      ? Theme.of(context).textTheme.bodyMedium?.color
-                      : Theme.of(context).colorScheme.primary,
+                  color:
+                      selectedType == RecurringType.none
+                          ? Theme.of(context).textTheme.bodyMedium?.color
+                          : Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(width: 4),
               Icon(
                 Icons.arrow_drop_down,
-                color: selectedType == RecurringType.none
-                    ? Theme.of(context).textTheme.bodyMedium?.color
-                    : Theme.of(context).colorScheme.primary,
+                color:
+                    selectedType == RecurringType.none
+                        ? Theme.of(context).textTheme.bodyMedium?.color
+                        : Theme.of(context).colorScheme.primary,
               ),
             ],
           ),
