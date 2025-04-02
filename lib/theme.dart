@@ -30,6 +30,7 @@ ThemeData lightTheme = ThemeData(
     trackOutlineColor: WidgetStateProperty.all(Colors.black12),
   ),
   cardColor: Colors.white,
+  dividerColor: Colors.grey.withValues(alpha: 0.1),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(color: Colors.black87),
     bodyMedium: TextStyle(color: Colors.black54),
@@ -72,6 +73,7 @@ ThemeData darkTheme = ThemeData(
     trackOutlineColor: WidgetStateProperty.all(Colors.grey.shade700),
   ),
   cardColor: Colors.grey.shade800,
+  dividerColor: Colors.grey.withValues(alpha: 0.1),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(color: Colors.white),
     bodyMedium: TextStyle(color: Colors.white70),

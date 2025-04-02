@@ -96,9 +96,6 @@ class _RecordListViewState extends State<RecordListView>
               ),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey.shade200, width: 1.0),
-                ),
               ),
               child: Row(
                 children: [
@@ -179,36 +176,37 @@ class _RecordListViewState extends State<RecordListView>
             onPressed: (context) async {
               final confirmed = await showDialog<bool>(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(
-                    record.isRecurring
-                        ? context.translate(
-                            'records.delete_recurring_title',
-                          )
-                        : context.translate(
-                            'records.delete_confirmation_title',
-                          ),
-                  ),
-                  content: Text(
-                    record.isRecurring
-                        ? context.translate(
-                            'records.delete_recurring_warning',
-                          )
-                        : context.translate(
-                            'records.delete_confirmation_message',
-                          ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, false),
-                      child: Text(context.translate('records.cancel')),
+                builder:
+                    (context) => AlertDialog(
+                      title: Text(
+                        record.isRecurring
+                            ? context.translate(
+                              'records.delete_recurring_title',
+                            )
+                            : context.translate(
+                              'records.delete_confirmation_title',
+                            ),
+                      ),
+                      content: Text(
+                        record.isRecurring
+                            ? context.translate(
+                              'records.delete_recurring_warning',
+                            )
+                            : context.translate(
+                              'records.delete_confirmation_message',
+                            ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(context.translate('records.cancel')),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text(context.translate('records.delete')),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, true),
-                      child: Text(context.translate('records.delete')),
-                    ),
-                  ],
-                ),
               );
 
               if (confirmed == true) {
@@ -247,12 +245,7 @@ class _RecordListViewState extends State<RecordListView>
         ],
       ),
       child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          border: Border(
-            bottom: BorderSide(color: Colors.grey.shade200, width: 1.0),
-          ),
-        ),
+        decoration: BoxDecoration(color: Theme.of(context).cardColor),
         child: _buildRecordCard(context, record, locale, currencyFormatter),
       ),
     );
@@ -266,10 +259,20 @@ class _RecordListViewState extends State<RecordListView>
   ) {
     final isExpense = record.isNegative;
     final isFutureRecord = record.date.isAfter(DateTime.now());
-    final textColor = isFutureRecord ? Colors.grey : Colors.black;
-    final amountColor = isFutureRecord
-        ? (isExpense ? Colors.grey.shade400 : Colors.grey.shade400)
-        : (isExpense ? Colors.red.shade300 : Colors.green.shade300);
+    final textColor =
+        isFutureRecord
+            ? Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withValues(alpha: 0.6)
+            : Theme.of(context).textTheme.titleMedium?.color;
+    final amountColor =
+        isFutureRecord
+            ? Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withValues(alpha: 0.6)
+            : (isExpense
+                ? Colors.redAccent.shade200
+                : Colors.greenAccent.shade200);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
@@ -293,10 +296,15 @@ class _RecordListViewState extends State<RecordListView>
               Text(
                 DateFormat('HH:mm', locale.languageCode).format(record.date),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isFutureRecord
-                          ? Colors.grey.shade400
-                          : Colors.grey.shade600,
-                    ),
+                  color:
+                      isFutureRecord
+                          ? Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.color?.withValues(alpha: 0.5)
+                          : Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.color?.withValues(alpha: 0.8),
+                ),
               ),
             ],
           ),
@@ -313,20 +321,28 @@ class _RecordListViewState extends State<RecordListView>
                         child: Icon(
                           Icons.repeat,
                           size: 14.0,
-                          color: isFutureRecord
-                              ? Colors.grey.shade400
-                              : Colors.black54,
+                          color:
+                              isFutureRecord
+                                  ? Theme.of(context).textTheme.bodySmall?.color
+                                      ?.withValues(alpha: 0.5)
+                                  : Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.color,
                         ),
                       ),
                     Expanded(
                       child: Text(
                         _getRecurringText(context, record, locale),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: isFutureRecord
-                                  ? Colors.grey.shade400
-                                  : Colors.black54,
-                            ),
-                        overflow: TextOverflow.ellipsis,
+                          color:
+                              isFutureRecord
+                                  ? Theme.of(context).textTheme.bodySmall?.color
+                                      ?.withValues(alpha: 0.5)
+                                  : Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.color,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
@@ -335,9 +351,9 @@ class _RecordListViewState extends State<RecordListView>
               Text(
                 '${isExpense ? '-' : ''}${currencyFormatter.format(double.parse(record.isNegative ? record.amountValue : record.amount))}',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: amountColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: amountColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -352,7 +368,8 @@ class _RecordListViewState extends State<RecordListView>
     }
 
     final now = DateTime.now();
-    final isToday = record.date.year == now.year &&
+    final isToday =
+        record.date.year == now.year &&
         record.date.month == now.month &&
         record.date.day == now.day;
 
@@ -372,24 +389,13 @@ class _RecordListViewState extends State<RecordListView>
       case RecurringType.daily:
         return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.daily')}";
       case RecurringType.weekly:
-        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.weekly', args: {
-              'day': dayFormatter.format(record.date)
-            })}";
+        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.weekly', args: {'day': dayFormatter.format(record.date)})}";
       case RecurringType.biweekly:
-        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.bi_weekly', args: {
-              'day': dayFormatter.format(record.date)
-            })}";
+        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.bi_weekly', args: {'day': dayFormatter.format(record.date)})}";
       case RecurringType.monthly:
-        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.monthly', args: {
-              'day': DateFormat('d').format(record.date),
-              'suffix': _getDaySuffix(context, record.date.day, locale)
-            })}";
+        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.monthly', args: {'day': DateFormat('d').format(record.date), 'suffix': _getDaySuffix(context, record.date.day, locale)})}";
       case RecurringType.yearly:
-        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.yearly', args: {
-              'month':
-                  DateFormat('MMMM', locale.languageCode).format(record.date),
-              'day': DateFormat('d').format(record.date)
-            })}";
+        return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.yearly', args: {'month': DateFormat('MMMM', locale.languageCode).format(record.date), 'day': DateFormat('d').format(record.date)})}";
       case RecurringType.lastMonthDay:
         return "${shortDayWithSeparator(record.date)} ${context.translate('display.recurring.last_month_day')}";
       case RecurringType.lastBusinessDay:
@@ -429,7 +435,9 @@ class _RecordListViewState extends State<RecordListView>
   }
 
   double _calculateMonthTotal(List<Record> records, bool expenses) {
-    return records.where((r) => r.isNegative == expenses).fold(
+    return records
+        .where((r) => r.isNegative == expenses)
+        .fold(
           0.0,
           (sum, record) =>
               sum + double.parse(expenses ? record.amountValue : record.amount),
@@ -469,10 +477,10 @@ class _RecordListViewState extends State<RecordListView>
     NumberFormat currencyFormatter,
   ) {
     final tagStats = _getTagStatistics(monthRecords);
-    final sortedTags = tagStats.entries.toList()
-      ..sort(
-        (a, b) => b.value.totalCount().compareTo(a.value.totalCount()),
-      );
+    final sortedTags =
+        tagStats.entries.toList()..sort(
+          (a, b) => b.value.totalCount().compareTo(a.value.totalCount()),
+        );
 
     final topTags = sortedTags.take(3).toList();
 
@@ -483,10 +491,10 @@ class _RecordListViewState extends State<RecordListView>
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor.withValues(alpha: 0.05),
-            border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
+
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Theme.of(context).shadowColor.withValues(alpha: 0.05),
                 blurRadius: 2,
                 offset: const Offset(0, 1),
               ),
@@ -503,16 +511,17 @@ class _RecordListViewState extends State<RecordListView>
                       vertical: 6.0,
                     ),
                     decoration: BoxDecoration(
-                      color:
-                          Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                      color: Theme.of(
+                        context,
+                      ).primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Text(
                       month,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   ),
                   const Spacer(),
@@ -524,9 +533,9 @@ class _RecordListViewState extends State<RecordListView>
                           _calculateMonthTotal(monthRecords, false),
                         ),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Colors.green.shade300,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: Colors.greenAccent.shade200,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -534,9 +543,9 @@ class _RecordListViewState extends State<RecordListView>
                           _calculateMonthTotal(monthRecords, true),
                         ),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Colors.red.shade300,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: Colors.redAccent.shade200,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
@@ -547,89 +556,104 @@ class _RecordListViewState extends State<RecordListView>
                 Text(
                   context.translate('records.frequent_tags'),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Colors.grey.shade700,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.color?.withValues(alpha: 0.8),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: topTags.map((entry) {
-                    final tag = entry.key;
-                    final stats = entry.value;
-                    final totalAmount = stats.income - stats.expenses;
+                  children:
+                      topTags.map((entry) {
+                        final tag = entry.key;
+                        final stats = entry.value;
+                        final totalAmount = stats.income - stats.expenses;
 
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.03),
-                            blurRadius: 1,
-                            offset: const Offset(0, 1),
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                tag,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.w500),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Theme.of(context).cardColor
+                                    : Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Theme.of(context).dividerColor,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(
+                                  context,
+                                ).shadowColor.withValues(alpha: 0.03),
+                                blurRadius: 1,
+                                offset: const Offset(0, 1),
                               ),
-                              const SizedBox(width: 4),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(
-                                    context,
-                                  ).primaryColor.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  stats.totalCount().toString(),
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodySmall?.copyWith(
-                                        color: Theme.of(context).primaryColor,
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    tag,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.w500),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      stats.totalCount().toString(),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall?.copyWith(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
                                         fontWeight: FontWeight.w600,
                                       ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                currencyFormatter.format(totalAmount),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall?.copyWith(
+                                  color:
+                                      totalAmount >= 0
+                                          ? Colors.greenAccent.shade200
+                                          : Colors.redAccent.shade200,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            currencyFormatter.format(totalAmount),
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodySmall?.copyWith(
-                                  color: totalAmount >= 0
-                                      ? Colors.green.shade300
-                                      : Colors.red.shade300,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                        );
+                      }).toList(),
                 ),
               ],
             ],
@@ -679,12 +703,7 @@ class _RecordListViewState extends State<RecordListView>
       children: [
         _buildMonthHeader(context, month, monthRecords, currencyFormatter),
         Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            border: Border(
-              bottom: BorderSide(color: Colors.grey.shade100, width: 4.0),
-            ),
-          ),
+          decoration: BoxDecoration(color: Theme.of(context).cardColor),
           child: Column(
             children: [
               if (hasFutureRecords) ...[
@@ -700,10 +719,12 @@ class _RecordListViewState extends State<RecordListView>
                       horizontal: 16.0,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey.shade200),
-                      ),
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Theme.of(
+                                context,
+                              ).cardColor.withValues(alpha: 0.3)
+                              : Colors.grey.shade100,
                     ),
                     child: Row(
                       children: [
@@ -713,10 +734,11 @@ class _RecordListViewState extends State<RecordListView>
                             'records.future_records',
                             args: {'count': futureRecords.length.toString()},
                           ),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(color: Colors.grey.shade600),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).textTheme.bodySmall?.color,
+                          ),
                         ),
                         const Spacer(),
                         AnimatedRotation(
@@ -724,7 +746,9 @@ class _RecordListViewState extends State<RecordListView>
                           turns: isExpanded ? 0.5 : 0,
                           child: Icon(
                             Icons.expand_more,
-                            color: Colors.grey.shade600,
+                            color: Theme.of(
+                              context,
+                            ).iconTheme.color?.withValues(alpha: 0.7),
                           ),
                         ),
                       ],
@@ -734,17 +758,18 @@ class _RecordListViewState extends State<RecordListView>
                 SizeTransition(
                   sizeFactor: _animations[month]!,
                   child: Column(
-                    children: futureRecords
-                        .map(
-                          (record) => _buildSlidableRecord(
-                            context,
-                            record,
-                            Localizations.localeOf(context),
-                            currencyFormatter,
-                            recordsState,
-                          ),
-                        )
-                        .toList(),
+                    children:
+                        futureRecords
+                            .map(
+                              (record) => _buildSlidableRecord(
+                                context,
+                                record,
+                                Localizations.localeOf(context),
+                                currencyFormatter,
+                                recordsState,
+                              ),
+                            )
+                            .toList(),
                   ),
                 ),
               ],
