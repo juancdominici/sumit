@@ -24,7 +24,6 @@ class _DisplayState extends State<Display> {
   final FocusNode _focusNode = FocusNode();
   bool _isLoadingGroups = false;
   List<Group> _groups = [];
-  String? _selectedGroupName;
 
   @override
   void initState() {
@@ -54,9 +53,6 @@ class _DisplayState extends State<Display> {
               )
               .where((group) => group.deleted == null)
               .toList();
-
-      // Update selected group name if there's a groupId selected
-      _updateSelectedGroupName();
     } catch (e) {
       logger.e('Error loading groups: $e');
     } finally {
@@ -65,19 +61,6 @@ class _DisplayState extends State<Display> {
           _isLoadingGroups = false;
         });
       }
-    }
-  }
-
-  void _updateSelectedGroupName() {
-    final displayState = June.getState(() => DisplayState());
-    if (displayState.groupId != null && _groups.isNotEmpty) {
-      final selectedGroup = _groups.firstWhere(
-        (group) => group.id == displayState.groupId,
-        orElse: () => _groups[0],
-      );
-      _selectedGroupName = selectedGroup.groupName;
-    } else {
-      _selectedGroupName = null;
     }
   }
 
@@ -234,11 +217,9 @@ class _DisplayState extends State<Display> {
             onGroupSelected: (groupId) {
               final displayState = June.getState(() => DisplayState());
               displayState.setGroupId(groupId);
-              setState(() {
-                _updateSelectedGroupName();
-              });
             },
             selectedGroupId: June.getState(() => DisplayState()).groupId,
+            isLoading: _isLoadingGroups,
           ),
     );
   }
@@ -448,7 +429,7 @@ class _DisplayState extends State<Display> {
                           iconSize: 32,
                           onPressed: _showGroupSelectionSheet,
                         ),
-                        if (_selectedGroupName != null)
+                        if (displayState.groupId != null)
                           Positioned(
                             top: 8,
                             right: 8,
@@ -478,12 +459,14 @@ class GroupSelectionSheet extends StatelessWidget {
   final List<Group> groups;
   final Function(String?) onGroupSelected;
   final String? selectedGroupId;
+  final bool isLoading;
 
   const GroupSelectionSheet({
     super.key,
     required this.groups,
     required this.onGroupSelected,
     this.selectedGroupId,
+    this.isLoading = false,
   });
 
   @override
@@ -516,8 +499,13 @@ class GroupSelectionSheet extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(),
-          if (groups.isEmpty)
+          Divider(color: Theme.of(context).scaffoldBackgroundColor),
+          if (isLoading)
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(children: [CircularProgressIndicator()]),
+            )
+          else if (groups.isEmpty)
             Padding(
               padding: const EdgeInsets.all(32.0),
               child: Column(
