@@ -16,6 +16,9 @@ jobs:
         run: |
           VERSION=$(grep -E '^version:' pubspec.yaml | sed 's/version: *//g' | cut -d'+' -f1)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
       - name: Flutter Build
         uses: AcmeSoftwareLLC/flutter-build@v1.0.2
         with:
