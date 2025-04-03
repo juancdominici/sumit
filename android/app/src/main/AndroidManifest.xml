@@ -47,15 +47,6 @@
                 <data android:scheme="https" android:host="sumit.app" android:pathPrefix="/join" />
             </intent-filter>
         </activity>
-        <!-- Posthog -->
-        <meta-data android:name="com.posthog.posthog.API_KEY"
-            android:value="phc_LlxzD7PLUQLwIx6MoeAyONz1Iyb54FfYb1yI0K6XNZ1" />
-        <meta-data android:name="com.posthog.posthog.POSTHOG_HOST"
-            android:value="https://us.i.posthog.com" />
-        <meta-data android:name="com.posthog.posthog.TRACK_APPLICATION_LIFECYCLE_EVENTS"
-            android:value="true" />
-        <meta-data android:name="com.posthog.posthog.DEBUG" android:value="true" />
-
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

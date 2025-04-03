@@ -7,6 +7,7 @@ import 'package:sumit/services/translations_service.dart';
 import 'package:june/june.dart';
 import 'package:sumit/state/settings.dart';
 import 'package:sumit/utils.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'router.dart';
 
 Future<void> main() async {
@@ -22,6 +23,9 @@ Future<void> main() async {
 
   logger.i('Supabase URL: ${dotenv.env['SUPABASE_URL']}');
   logger.i('Supabase initialized successfully');
+
+  await Posthog().setup(PostHogConfig(dotenv.env['POSTHOG_API_KEY']!));
+  logger.i('PostHog initialized successfully');
 
   final translationsService = TranslationsService();
   await translationsService.loadTranslations();
