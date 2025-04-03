@@ -9,10 +9,13 @@ jobs:
     name: Build and Deploy to Google Play Store
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Get version
         id: get_version
         run: |
-          echo "::set-output name=version::$(cat pubspec.yaml | grep version | cut -d: -f2 | tr -d ' ')"
+          VERSION=$(cat pubspec.yaml | grep version | cut -d: -f2 | tr -d ' ')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Flutter Build
         uses: AcmeSoftwareLLC/flutter-build@v1.0.2
         with:
