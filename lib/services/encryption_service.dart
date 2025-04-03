@@ -2,11 +2,26 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:posthog_flutter/posthog_flutter.dart';
 
 /// Provides methods to securely encrypt and decrypt invite codes
 class EncryptionService {
-  // TODO: Create secret key for encryption
-  static const String _secretKeyString = 'secret_key_encryption';
+  static String _secretKeyString = "";
+
+  static Future<void> init() async {
+    final secretKey = await getSecretKey();
+    _secretKeyString = secretKey;
+  }
+
+  static Future<String> getSecretKey() async {
+    final prefs = await Posthog().getFeatureFlagPayload('group-key');
+
+    if (prefs == null) {
+      throw Exception('Group key not found');
+    }
+
+    return (prefs as Map<String, dynamic>)['secret'];
+  }
 
   // Cache the encryption key to avoid recomputing
   static final encrypt.Key _key = _deriveKey(_secretKeyString);

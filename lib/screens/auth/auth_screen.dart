@@ -5,6 +5,7 @@ import 'package:sumit/state/module.dart';
 import 'package:sumit/utils.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:sumit/utils/translations_extension.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 
 class AuthScreen extends StatefulWidget {
   final String? error;
@@ -161,9 +162,17 @@ class _AuthScreenState extends State<AuthScreen>
                               ),
                             ),
                           ),
-                          // TODO: Use a feature flag to toggle between auth methods
-                          child:
-                              false
+                          child: FutureBuilder<bool>(
+                            future: Posthog().isFeatureEnabled('magic-auth'),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+
+                              final useMagicAuth = snapshot.data ?? false;
+
+                              return useMagicAuth
                                   ? SupaMagicAuth(
                                     redirectUrl: 'ar.com.sumit://auth-callback',
                                     onSuccess: (response) {
@@ -205,7 +214,9 @@ class _AuthScreenState extends State<AuthScreen>
                                     },
                                     prefixIconEmail: null,
                                     prefixIconPassword: null,
-                                  ),
+                                  );
+                            },
+                          ),
                         ),
                       ),
                     ],
