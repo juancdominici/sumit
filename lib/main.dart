@@ -24,7 +24,13 @@ Future<void> main() async {
   logger.i('Supabase URL: ${dotenv.env['SUPABASE_URL']}');
   logger.i('Supabase initialized successfully');
 
-  await Posthog().setup(PostHogConfig(dotenv.env['POSTHOG_API_KEY']!));
+  // Initialize PostHog
+
+  final config = PostHogConfig(dotenv.env['POSTHOG_API_KEY']!);
+  config.host = 'https://us.i.posthog.com';
+  config.debug = true;
+
+  await Posthog().setup(config);
   logger.i('PostHog initialized successfully');
 
   final translationsService = TranslationsService();
