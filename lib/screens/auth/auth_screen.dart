@@ -192,22 +192,37 @@ class _AuthScreenState extends State<AuthScreen>
                                     },
                                     onSignUpComplete: (response) {
                                       logger.i('Sign up complete');
+                                      if (response.session != null) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              context.translate(
+                                                'auth.signup.success',
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      // Redirect to the sign in screen
+                                      router.push('/auth');
+                                    },
+                                    onError: (error) {
+                                      logger.e('Error: $error');
+                                      final errorCode =
+                                          (error as AuthException).code;
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             context.translate(
-                                              'signup_complete',
+                                              'auth.error.$errorCode',
                                             ),
                                           ),
                                         ),
                                       );
-                                      // Redirect to the sign in screen
-                                      router.push('/auth');
-                                    },
-                                    onError: (error) {
-                                      logger.e('Error: $error');
                                     },
                                     onPasswordResetEmailSent: () {
                                       logger.i('Password reset email sent');

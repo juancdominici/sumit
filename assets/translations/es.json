@@ -102,7 +102,9 @@
             "join_error": "Error al unirse al grupo. Por favor, intenta de nuevo."
         },
         "error": {
-            "not_authenticated": "Usuario no autenticado"
+            "not_authenticated": "Usuario no autenticado",
+            "invalid_credentials": "Credenciales inválidas",
+            "email_not_confirmed": "Tu correo electrónico no ha sido confirmado"
         }
     },
     "display": {

@@ -102,7 +102,9 @@
             "join_error": "Failed to join the group. Please try again."
         },
         "error": {
-            "not_authenticated": "User not authenticated"
+            "not_authenticated": "User not authenticated",
+            "invalid_credentials": "Invalid credentials",
+            "email_not_confirmed": "Your email has not been confirmed"
         }
     },
     "display": {
