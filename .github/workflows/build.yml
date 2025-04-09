@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get version
         id: get_version
@@ -40,14 +40,14 @@ jobs:
           tree-shake-icons: false
 
       - name: Upload App Bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-bundle
           path: build/app/outputs/bundle/release/app-release.aab
           retention-days: 1
 
       - name: Upload Debug Symbols
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: debug-symbols
           path: build/outputs/bundle/release/native-debug-symbols.zip

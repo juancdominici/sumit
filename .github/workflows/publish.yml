@@ -15,13 +15,13 @@ jobs:
 
     steps:
       - name: Download App Bundle
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: app-bundle
           path: build/app/outputs/bundle/release
 
       - name: Download Debug Symbols
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: debug-symbols
           path: build/outputs/bundle/release
