@@ -1,0 +1,54 @@
+name: Build Android App Bundle
+
+on:
+  push:
+    branches: [master]
+  workflow_call:
+    outputs:
+      version:
+        description: "The version of the built app"
+        value: ${{ jobs.build.outputs.version }}
+
+jobs:
+  build:
+    name: Build App Bundle
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get version
+        id: get_version
+        run: |
+          VERSION=$(grep -E '^version:' pubspec.yaml | sed 's/version: *//g' | cut -d'+' -f1)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Flutter Build
+        uses: AcmeSoftwareLLC/flutter-build@v1.0.2
+        with:
+          platform: android
+          build-name: ${{ steps.get_version.outputs.version }}
+          build-number: ${{ github.run_number }}
+          pub-get: true
+          tree-shake-icons: false
+
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 1
+
+      - name: Upload Debug Symbols
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug-symbols
+          path: build/outputs/bundle/release/native-debug-symbols.zip
+          retention-days: 1
