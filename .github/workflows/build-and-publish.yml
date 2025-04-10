@@ -79,3 +79,4 @@ jobs:
           status: draft
           versionCode: ${{ steps.get_version.outputs.version_code }}
           releaseName: ${{ steps.get_version.outputs.version_name }}
+          changesNotSentForReview: true
