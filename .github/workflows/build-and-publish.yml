@@ -77,5 +77,5 @@ jobs:
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: production
           status: draft
-          versionCode: ${{ steps.get_version.outputs.version_code }}
           releaseName: ${{ steps.get_version.outputs.version_name }}
+          changesNotSentForReview: true
