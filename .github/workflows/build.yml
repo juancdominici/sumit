@@ -30,6 +30,14 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
 
+      - name: Create keystore file
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/upload-keystore.jks
+
+      - name: Create key.properties file
+        run: |
+          echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+
       - name: Flutter Build
         uses: AcmeSoftwareLLC/flutter-build@v1.0.2
         with:

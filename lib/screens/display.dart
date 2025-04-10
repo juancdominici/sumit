@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:june/june.dart';
 import 'package:sumit/state/module.dart';
 import 'package:sumit/models/module.dart';
-import 'package:sumit/models/group.dart';
 import 'package:intl/intl.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:sumit/utils.dart';
@@ -541,7 +540,7 @@ class GroupSelectionSheet extends StatelessWidget {
                   title: Text(context.translate('groups.no_group')),
                   selected: selectedGroupId == null,
                   selectedTileColor:
-                      Theme.of(context).colorScheme.surfaceVariant,
+                      Theme.of(context).colorScheme.surfaceContainerHighest,
                   onTap: () {
                     onGroupSelected(null);
                     Navigator.pop(context);
@@ -556,13 +555,13 @@ class GroupSelectionSheet extends StatelessWidget {
                     title: Text(group.groupName),
                     selected: group.id == selectedGroupId,
                     selectedTileColor:
-                        Theme.of(context).colorScheme.surfaceVariant,
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     onTap: () {
                       onGroupSelected(group.id);
                       Navigator.pop(context);
                     },
                   );
-                }).toList(),
+                }),
               ],
             ),
         ],

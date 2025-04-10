@@ -360,8 +360,9 @@ class _GroupListScreenState extends State<GroupListScreen> {
                                             if (isOwner) _renameGroup(group);
                                             break;
                                           case 'delete':
-                                            if (isOwner)
+                                            if (isOwner) {
                                               _showDeleteConfirmation(group);
+                                            }
                                             break;
                                         }
                                       },
