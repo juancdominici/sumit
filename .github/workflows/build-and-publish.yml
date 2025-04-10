@@ -79,3 +79,5 @@ jobs:
           status: draft
           releaseName: ${{ steps.get_version.outputs.version_name }}
           changesNotSentForReview: true
+          mappingFile: build/app/outputs/mapping/release/mapping.txt
+          whatsNewDirectory: distribution/whatsnew
