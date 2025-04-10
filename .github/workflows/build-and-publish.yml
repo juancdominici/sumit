@@ -23,8 +23,10 @@ jobs:
       - name: Get version
         id: get_version
         run: |
-          VERSION=$(grep -E '^version:' pubspec.yaml | sed 's/version: *//g' | cut -d'+' -f1)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION_NAME=$(grep -E '^version:' pubspec.yaml | sed 's/version: *//g' | cut -d'+' -f1)
+          VERSION_CODE=$(grep -E '^version:' pubspec.yaml | sed 's/version: *//g' | cut -d'+' -f2)
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
 
       - name: Create .env file
         run: |
@@ -42,8 +44,8 @@ jobs:
         uses: AcmeSoftwareLLC/flutter-build@v1.0.2
         with:
           platform: android
-          build-name: ${{ steps.get_version.outputs.version }}
-          build-number: ${{ github.run_number }}
+          build-name: ${{ steps.get_version.outputs.version_name }}
+          build-number: ${{ steps.get_version.outputs.version_code }}
           pub-get: true
           tree-shake-icons: false
 
@@ -75,3 +77,5 @@ jobs:
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           track: production
           status: draft
+          versionCode: ${{ steps.get_version.outputs.version_code }}
+          releaseName: ${{ steps.get_version.outputs.version_name }}
