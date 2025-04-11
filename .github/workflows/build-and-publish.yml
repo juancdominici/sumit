@@ -68,26 +68,16 @@ jobs:
     steps:
       - name: Download App Bundle
         uses: actions/download-artifact@v4
-        with:
-          name: app-bundle
-          path: ./
-          merge-multiple: true
-
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Checkout code
-        uses: actions/checkout@v4
 
       - name: Upload to Play Store
         uses: r0adkll/upload-google-play@v1.1.3
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: ar.com.sumit
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          releaseFiles: app-bundle/build/app/outputs/bundle/release/app-release.aab
           track: production
           status: draft
           releaseName: ${{ steps.get_version.outputs.version_name }}
           changesNotSentForReview: true
-          mappingFile: build/app/outputs/mapping/release/mapping.txt
-          whatsNewDirectory: distribution/whatsnew
+          mappingFile: app-bundle/build/app/outputs/mapping/release/mapping.txt
+          whatsNewDirectory: app-bundle/distribution/whatsnew
