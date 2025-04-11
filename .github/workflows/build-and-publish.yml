@@ -69,6 +69,9 @@ jobs:
           name: app-bundle
           path: build/app/outputs/bundle/release
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Upload to Play Store
         uses: r0adkll/upload-google-play@v1.1.3
         with:
