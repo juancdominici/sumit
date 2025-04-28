@@ -138,27 +138,48 @@ class _HomeScreenState extends State<HomeScreen> {
                       context: context,
                       builder:
                           (BuildContext context) => Container(
-                            height: 400,
                             decoration: BoxDecoration(
                               color:
                                   Theme.of(
                                     context,
                                   ).bottomSheetTheme.backgroundColor,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
                             ),
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [const SettingsBlock()],
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 24,
+                                  ),
+                                  child: Container(
+                                    height: 4,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.grey.shade600
+                                              : Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(2.5),
+                                    ),
+                                  ),
+                                ),
+                                const SettingsBlock(),
+                              ],
                             ),
                           ),
                       isDismissible: true,
                       enableDrag: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
                     ),
               ),
             ],
@@ -175,10 +196,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Display(
-                          openCalendar:
-                              () => setState(() {
-                                _showCalendar = !_showCalendar;
-                              }),
+                            openCalendar:
+                                () => setState(() {
+                                  _showCalendar = !_showCalendar;
+                                }),
                         ),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 300),
