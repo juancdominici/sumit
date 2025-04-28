@@ -195,11 +195,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     (vm) => Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Display(
+                        Expanded(
+                          child: Display(
                             openCalendar:
                                 () => setState(() {
                                   _showCalendar = !_showCalendar;
                                 }),
+                          ),
                         ),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 300),

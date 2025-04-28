@@ -233,7 +233,6 @@ class _DisplayState extends State<Display> {
     _updateTagFromState(displayState);
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.35,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.only(
