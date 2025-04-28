@@ -6,6 +6,7 @@ import 'package:sumit/utils.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
+import 'package:sumit/services/version_service.dart';
 
 class AuthScreen extends StatefulWidget {
   final String? error;
@@ -22,6 +23,7 @@ class _AuthScreenState extends State<AuthScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  String _version = '';
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _AuthScreenState extends State<AuthScreen>
       CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
     );
     _animationController.forward();
+    _loadVersion();
 
     if (widget.isCallback) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -49,6 +52,13 @@ class _AuthScreenState extends State<AuthScreen>
         );
       });
     }
+  }
+
+  Future<void> _loadVersion() async {
+    final version = await VersionService.getVersionString();
+    setState(() {
+      _version = version;
+    });
   }
 
   @override
@@ -233,6 +243,15 @@ class _AuthScreenState extends State<AuthScreen>
                             },
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Version number
+                      Text(
+                        'v$_version',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                        textAlign: TextAlign.right,
                       ),
                     ],
                   ),

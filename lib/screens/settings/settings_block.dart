@@ -5,6 +5,7 @@ import 'package:sumit/state/module.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sumit/utils/translations_extension.dart';
+import 'package:sumit/services/version_service.dart';
 
 class SettingsBlock extends StatefulWidget {
   const SettingsBlock({super.key});
@@ -16,17 +17,26 @@ class SettingsBlock extends StatefulWidget {
 class _SettingsBlockState extends State<SettingsBlock> {
   bool _defaultNegative = false;
   final _prefs = SharedPreferences.getInstance();
+  String _version = '';
 
   @override
   void initState() {
     super.initState();
     _loadPreferences();
+    _loadVersion();
   }
 
   Future<void> _loadPreferences() async {
     final prefs = await _prefs;
     setState(() {
       _defaultNegative = prefs.getBool('default_negative') ?? false;
+    });
+  }
+
+  Future<void> _loadVersion() async {
+    final version = await VersionService.getVersionString();
+    setState(() {
+      _version = version;
     });
   }
 
@@ -377,6 +387,17 @@ class _SettingsBlockState extends State<SettingsBlock> {
                 await Supabase.instance.client.auth.signOut();
                 router.go('/login');
               },
+            ),
+            ListTile(
+              title: Text(
+                'v$_version',
+                style: TextStyle(
+                  color: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.color?.withOpacity(0.5),
+                ),
+                textAlign: TextAlign.right,
+              ),
             ),
           ],
         );
