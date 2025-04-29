@@ -31,7 +31,7 @@ jobs:
       - name: Create .env file
         run: |
           mkdir -p configs
-          echo "${{ secrets.ENV_FILE }}" > configs/.env.production
+          echo "${{ secrets.ENV_FILE }}" > configs/.env
 
       - name: Create keystore file
         run: |
@@ -49,7 +49,7 @@ jobs:
           build-number: ${{ steps.get_version.outputs.version_code }}
           pub-get: true
           tree-shake-icons: false
-          dart-define-file: configs/.env.production
+          dart-define-file: configs/.env
 
       - name: Upload App Bundle
         uses: actions/upload-artifact@v4
