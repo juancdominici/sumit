@@ -290,5 +290,9 @@
     },
     "app": {
         "title": "Sumit"
+    },
+    "offline": {
+        "message": "You're currently offline",
+        "description": "Connect to the internet to sync your data"
     }
 }

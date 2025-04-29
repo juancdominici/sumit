@@ -290,5 +290,9 @@
     },
     "app": {
         "title": "Sumit"
+    },
+    "offline": {
+        "message": "Estás sin conexión",
+        "description": "Conéctate a internet para sincronizar tus datos"
     }
 }
