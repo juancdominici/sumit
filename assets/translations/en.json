@@ -286,7 +286,9 @@
         "rename": "Rename Group",
         "delete": "Delete Group",
         "select_group": "Select Group",
-        "no_group": "Personal (you)"
+        "no_group": "Personal (you)",
+        "show_deleted": "Show Deleted Groups",
+        "hide_deleted": "Hide Deleted Groups"
     },
     "app": {
         "title": "Sumit"

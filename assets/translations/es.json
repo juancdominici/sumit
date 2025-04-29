@@ -269,7 +269,7 @@
     },
     "groups": {
         "title": "Grupos",
-        "empty": "Aún no te has unido a ningún grupo.\n¡Crea o únete a un grupo para comenzar a compartir gastos!",
+        "empty": "No te has unido a ningún grupo.\n¡Crea o únete a un grupo para empezar a compartir gastos!",
         "create": "Crear Grupo",
         "join_existing": "Unirse a Grupo Existente",
         "owner": "Propietario",
@@ -286,7 +286,9 @@
         "rename": "Renombrar Grupo",
         "delete": "Eliminar Grupo",
         "select_group": "Seleccionar Grupo",
-        "no_group": "Personal (tú)"
+        "no_group": "Personal (tú)",
+        "show_deleted": "Mostrar Grupos Eliminados",
+        "hide_deleted": "Ocultar Grupos Eliminados"
     },
     "app": {
         "title": "Sumit"
