@@ -271,7 +271,7 @@
         "title": "Groups",
         "empty": "You haven't joined any groups yet.\nCreate or join a group to start sharing expenses!",
         "create": "Create Group",
-        "join_existing": "Join Existing Group",
+        "join_existing": "Join existing group",
         "owner": "Owner",
         "member": "Member",
         "deleted_status": "Deleted",
@@ -288,7 +288,9 @@
         "select_group": "Select Group",
         "no_group": "Personal (you)",
         "show_deleted": "Show Deleted Groups",
-        "hide_deleted": "Hide Deleted Groups"
+        "hide_deleted": "Hide Deleted Groups",
+        "your_groups": "Your groups",
+        "other_groups": "Other groups"
     },
     "app": {
         "title": "Sumit"

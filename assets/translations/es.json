@@ -271,7 +271,7 @@
         "title": "Grupos",
         "empty": "No te has unido a ningún grupo.\n¡Crea o únete a un grupo para empezar a compartir gastos!",
         "create": "Crear Grupo",
-        "join_existing": "Unirse a Grupo Existente",
+        "join_existing": "Unirse a grupo existente",
         "owner": "Propietario",
         "member": "Miembro",
         "deleted_status": "Eliminado",
@@ -288,7 +288,9 @@
         "select_group": "Seleccionar Grupo",
         "no_group": "Personal (tú)",
         "show_deleted": "Mostrar Grupos Eliminados",
-        "hide_deleted": "Ocultar Grupos Eliminados"
+        "hide_deleted": "Ocultar Grupos Eliminados",
+        "your_groups": "Tus grupos",
+        "other_groups": "Otros grupos"
     },
     "app": {
         "title": "Sumit"

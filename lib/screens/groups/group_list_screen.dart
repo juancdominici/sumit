@@ -404,267 +404,105 @@ class _GroupListScreenState extends State<GroupListScreen> {
                     )
                     : RefreshIndicator(
                       onRefresh: _loadGroups,
-                      child: ListView.builder(
-                        itemCount: filteredGroups.length,
-                        itemBuilder: (context, index) {
-                          final group = filteredGroups[index];
-                          final isOwner =
-                              group.groupOwner ==
-                              Supabase.instance.client.auth.currentUser?.id;
-                          final isDeleted = group.deleted != null;
-
-                          return ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 8,
-                            ),
-                            title: Text(
-                              group.groupName,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color:
-                                    isDeleted
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withValues(alpha: 0.5)
-                                        : null,
+                      child: ListView(
+                        children: [
+                          // Owner Groups Section
+                          if (filteredGroups.any(
+                            (g) =>
+                                g.groupOwner ==
+                                Supabase.instance.client.auth.currentUser?.id,
+                          )) ...[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                              child: Text(
+                                context.translate("groups.your_groups"),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                            subtitle: Text(
-                              isDeleted
-                                  ? context.translate("groups.deleted_status")
-                                  : isOwner
-                                  ? context.translate("groups.owner")
-                                  : context.translate("groups.member"),
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodySmall?.copyWith(
+                            ...filteredGroups
+                                .where(
+                                  (g) =>
+                                      g.groupOwner ==
+                                      Supabase
+                                          .instance
+                                          .client
+                                          .auth
+                                          .currentUser
+                                          ?.id,
+                                )
+                                .map((group) => _buildGroupTile(group)),
+                          ],
+
+                          // Add divider only if both sections exist
+                          if (filteredGroups.any(
+                                (g) =>
+                                    g.groupOwner ==
+                                    Supabase
+                                        .instance
+                                        .client
+                                        .auth
+                                        .currentUser
+                                        ?.id,
+                              ) &&
+                              filteredGroups.any(
+                                (g) =>
+                                    g.groupOwner !=
+                                    Supabase
+                                        .instance
+                                        .client
+                                        .auth
+                                        .currentUser
+                                        ?.id,
+                              ))
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 8,
+                              ),
+                              child: Divider(
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.6),
+                                ).colorScheme.outline.withOpacity(0.3),
                               ),
                             ),
-                            trailing:
-                                isDeleted
-                                    ? null
-                                    : Theme(
-                                      data: Theme.of(context).copyWith(
-                                        popupMenuTheme: PopupMenuThemeData(
-                                          color:
-                                              Theme.of(
-                                                context,
-                                              ).colorScheme.surface,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      child: PopupMenuButton<String>(
-                                        icon: const Icon(Icons.more_vert),
-                                        position: PopupMenuPosition.under,
-                                        elevation: 0,
-                                        offset: const Offset(0, 8),
-                                        constraints: const BoxConstraints(
-                                          minWidth: 200,
-                                        ),
-                                        onSelected: (value) {
-                                          switch (value) {
-                                            case 'copy':
-                                              _copyInviteCode(group.id);
-                                              break;
-                                            case 'rename':
-                                              if (isOwner) _renameGroup(group);
-                                              break;
-                                            case 'delete':
-                                              if (isOwner) {
-                                                _showDeleteConfirmation(group);
-                                              }
-                                              break;
-                                          }
-                                        },
-                                        itemBuilder:
-                                            (context) => [
-                                              PopupMenuItem<String>(
-                                                padding: EdgeInsets.zero,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primary
-                                                        .withOpacity(0.1),
-                                                    border: Border.all(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary
-                                                          .withOpacity(0.2),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          16,
-                                                        ),
-                                                  ),
-                                                  margin: const EdgeInsets.all(
-                                                    4,
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          16,
-                                                        ),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        PopupMenuItem(
-                                                          height: 48,
-                                                          value: 'copy',
-                                                          padding:
-                                                              const EdgeInsets.symmetric(
-                                                                horizontal: 16,
-                                                              ),
-                                                          child: Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.copy,
-                                                                color:
-                                                                    Theme.of(
-                                                                          context,
-                                                                        )
-                                                                        .colorScheme
-                                                                        .primary,
-                                                                size: 20,
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 12,
-                                                              ),
-                                                              Expanded(
-                                                                child: Text(
-                                                                  context.translate(
-                                                                    "groups.copy_invite",
-                                                                  ),
-                                                                  style: Theme.of(
-                                                                    context,
-                                                                  ).textTheme.bodyLarge?.copyWith(
-                                                                    color:
-                                                                        Theme.of(
-                                                                          context,
-                                                                        ).colorScheme.onSurface,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        if (isOwner) ...[
-                                                          const Divider(
-                                                            height: 1,
-                                                            indent: 16,
-                                                            endIndent: 16,
-                                                          ),
-                                                          PopupMenuItem(
-                                                            height: 48,
-                                                            value: 'rename',
-                                                            padding:
-                                                                const EdgeInsets.symmetric(
-                                                                  horizontal:
-                                                                      16,
-                                                                ),
-                                                            child: Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons.edit,
-                                                                  color:
-                                                                      Theme.of(
-                                                                        context,
-                                                                      ).colorScheme.primary,
-                                                                  size: 20,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 12,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                    context.translate(
-                                                                      "groups.rename",
-                                                                    ),
-                                                                    style: Theme.of(
-                                                                      context,
-                                                                    ).textTheme.bodyLarge?.copyWith(
-                                                                      color:
-                                                                          Theme.of(
-                                                                            context,
-                                                                          ).colorScheme.onSurface,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          PopupMenuItem(
-                                                            height: 48,
-                                                            value: 'delete',
-                                                            padding:
-                                                                const EdgeInsets.symmetric(
-                                                                  horizontal:
-                                                                      16,
-                                                                ),
-                                                            child: Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons.delete,
-                                                                  color:
-                                                                      Theme.of(
-                                                                        context,
-                                                                      ).colorScheme.error,
-                                                                  size: 20,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 12,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                    context.translate(
-                                                                      "groups.delete",
-                                                                    ),
-                                                                    style: Theme.of(
-                                                                      context,
-                                                                    ).textTheme.bodyLarge?.copyWith(
-                                                                      color:
-                                                                          Theme.of(
-                                                                            context,
-                                                                          ).colorScheme.error,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                      ),
-                                    ),
-                          );
-                        },
+
+                          // Member Groups Section
+                          if (filteredGroups.any(
+                            (g) =>
+                                g.groupOwner !=
+                                Supabase.instance.client.auth.currentUser?.id,
+                          )) ...[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                              child: Text(
+                                context.translate("groups.other_groups"),
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            ...filteredGroups
+                                .where(
+                                  (g) =>
+                                      g.groupOwner !=
+                                      Supabase
+                                          .instance
+                                          .client
+                                          .auth
+                                          .currentUser
+                                          ?.id,
+                                )
+                                .map((group) => _buildGroupTile(group)),
+                          ],
+                        ],
                       ),
                     ),
           ),
@@ -720,6 +558,217 @@ class _GroupListScreenState extends State<GroupListScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildGroupTile(Group group) {
+    final isOwner =
+        group.groupOwner == Supabase.instance.client.auth.currentUser?.id;
+    final isDeleted = group.deleted != null;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      title: Text(
+        group.groupName,
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          color:
+              isDeleted
+                  ? Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5)
+                  : null,
+        ),
+      ),
+      subtitle: Text(
+        isDeleted
+            ? context.translate("groups.deleted_status")
+            : isOwner
+            ? context.translate("groups.owner")
+            : context.translate("groups.member"),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+        ),
+      ),
+      trailing:
+          isDeleted
+              ? null
+              : Theme(
+                data: Theme.of(context).copyWith(
+                  popupMenuTheme: PopupMenuThemeData(
+                    color: Theme.of(context).colorScheme.surface,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+                child: PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert),
+                  position: PopupMenuPosition.under,
+                  elevation: 0,
+                  offset: const Offset(0, 8),
+                  constraints: const BoxConstraints(minWidth: 200),
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'copy':
+                        _copyInviteCode(group.id);
+                        break;
+                      case 'rename':
+                        if (isOwner) _renameGroup(group);
+                        break;
+                      case 'delete':
+                        if (isOwner) {
+                          _showDeleteConfirmation(group);
+                        }
+                        break;
+                    }
+                  },
+                  itemBuilder:
+                      (context) => [
+                        PopupMenuItem<String>(
+                          padding: EdgeInsets.zero,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withOpacity(0.1),
+                              border: Border.all(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withOpacity(0.2),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            margin: const EdgeInsets.all(4),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  PopupMenuItem(
+                                    height: 48,
+                                    value: 'copy',
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.copy,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            context.translate(
+                                              "groups.copy_invite",
+                                            ),
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.bodyLarge?.copyWith(
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.onSurface,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if (isOwner) ...[
+                                    const Divider(
+                                      height: 1,
+                                      indent: 16,
+                                      endIndent: 16,
+                                    ),
+                                    PopupMenuItem(
+                                      height: 48,
+                                      value: 'rename',
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.edit,
+                                            color:
+                                                Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Text(
+                                              context.translate(
+                                                "groups.rename",
+                                              ),
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyLarge?.copyWith(
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.onSurface,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      height: 48,
+                                      value: 'delete',
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
+                                            color:
+                                                Theme.of(
+                                                  context,
+                                                ).colorScheme.error,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Text(
+                                              context.translate(
+                                                "groups.delete",
+                                              ),
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyLarge?.copyWith(
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.error,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                ),
+              ),
     );
   }
 }
