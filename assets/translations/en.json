@@ -104,7 +104,29 @@
         "error": {
             "not_authenticated": "User not authenticated",
             "invalid_credentials": "Invalid credentials",
-            "email_not_confirmed": "Your email has not been confirmed"
+            "email_not_confirmed": "Your email has not been confirmed",
+            "user_already_exists": "A user with this email or phone already exists.",
+            "email_exists": "A user with this email already exists.",
+            "phone_exists": "A user with this phone number already exists.",
+            "user_not_found": "No user found with these credentials.",
+            "bad_jwt": "Session expired or invalid. Please log in again.",
+            "phone_not_confirmed": "Your phone number is not confirmed.",
+            "invalid_email": "The email address is invalid.",
+            "invalid_phone": "The phone number is invalid.",
+            "weak_password": "Password is too weak. Please choose a stronger password.",
+            "signup_disabled": "Sign ups are currently disabled.",
+            "provider_disabled": "This sign-in method is currently disabled.",
+            "over_email_send_rate_limit": "Too many emails sent. Please try again later.",
+            "over_request_rate_limit": "Too many requests. Please try again later.",
+            "over_sms_send_rate_limit": "Too many SMS messages sent. Please try again later.",
+            "captcha_failed": "CAPTCHA verification failed. Please try again.",
+            "mfa_verification_failed": "Multi-factor authentication failed. Please try again.",
+            "otp_expired": "The one-time password has expired. Please request a new one.",
+            "otp_disabled": "One-time password sign-in is disabled.",
+            "session_expired": "Your session has expired. Please log in again.",
+            "conflict": "A conflict occurred. Please try again.",
+            "validation_failed": "Some information is invalid. Please check your input.",
+            "unexpected_failure": "An unexpected error occurred. Please try again later."
         }
     },
     "display": {
