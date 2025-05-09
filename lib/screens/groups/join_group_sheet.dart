@@ -4,6 +4,8 @@ import 'package:sumit/services/encryption_service.dart';
 import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class JoinGroupSheet extends StatefulWidget {
   /// Called after successfully joining a group
@@ -91,14 +93,10 @@ class _JoinGroupSheetState extends State<JoinGroupSheet> {
 
         if (existingMember.isNotEmpty) {
           // User is already a member
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                context.translate('auth.group_join.error.already_member'),
-              ),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+          AppFlushbar.info(
+            context: context,
+            message: context.translate('auth.group_join.error.already_member'),
+          ).show(context);
           Navigator.pop(context);
           return;
         }
@@ -117,14 +115,10 @@ class _JoinGroupSheetState extends State<JoinGroupSheet> {
         await supabase.from('group_members').insert(memberData);
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                context.translate('auth.group_join.joined_successfully'),
-              ),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
+          AppFlushbar.success(
+            context: context,
+            message: context.translate('auth.group_join.joined_successfully'),
+          ).show(context);
 
           // Close the sheet and refresh the groups list
           Navigator.pop(context);

@@ -7,6 +7,8 @@ import 'package:sumit/utils/translations_extension.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class RecordListView extends StatefulWidget {
   const RecordListView({super.key});
@@ -331,25 +333,25 @@ class _RecordListViewState extends State<RecordListView>
 
                   await recordsState.deleteRecord(record.id);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.translate('records.deleted')),
-                      action: SnackBarAction(
-                        label: context.translate('records.undo'),
-                        onPressed: () {
-                          recordsState.restoreRecord(record);
-                        },
+                  AppFlushbar.withAction(
+                    context: context,
+                    message: context.translate('records.deleted'),
+                    mainButton: TextButton(
+                      onPressed: () {
+                        recordsState.restoreRecord(record);
+                      },
+                      child: Text(
+                        context.translate('records.undo'),
+                        style: TextStyle(color: Colors.amber),
                       ),
                     ),
-                  );
+                  ).show(context);
                 } catch (e) {
                   recordsState.restoreRecord(record);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(context.translate('records.delete_error')),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  AppFlushbar.error(
+                    context: context,
+                    message: context.translate('records.delete_error'),
+                  ).show(context);
                 }
               }
             },

@@ -7,6 +7,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sumit/services/translations_service.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class SignupConfigScreen extends StatefulWidget {
   const SignupConfigScreen({super.key});
@@ -87,19 +89,13 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
         _darkMode = settingsState.userPreferences.darkMode;
       });
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.translate(
-                'settings.error.loading_data',
-                args: {'error': e.toString()},
-              ),
-            ),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      AppFlushbar.error(
+        context: context,
+        message: context.translate(
+          'settings.error.loading_data',
+          args: {'error': e.toString()},
+        ),
+      ).show(context);
     } finally {
       if (mounted) {
         setState(() {
@@ -126,14 +122,10 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
     final user = supabase.auth.currentUser;
 
     if (user == null) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.translate('auth.error.user_not_found')),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      AppFlushbar.error(
+        context: context,
+        message: context.translate('auth.error.user_not_found'),
+      ).show(context);
       setState(() {
         _isLoading = false;
       });
@@ -166,14 +158,7 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
       await _navigateWithAnimation('/group-creation');
     } catch (e) {
       logger.e(e);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      AppFlushbar.error(context: context, message: e.toString()).show(context);
     } finally {
       if (mounted) {
         setState(() {
@@ -214,12 +199,10 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
 
   void _showCurrencyPicker(BuildContext context, SettingsState settingsState) {
     if (settingsState.currencies.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.translate('settings.error.noCurrencies')),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      AppFlushbar.error(
+        context: context,
+        message: context.translate('settings.error.noCurrencies'),
+      ).show(context);
       _loadSettings();
       return;
     }
@@ -319,12 +302,10 @@ class SignupConfigScreenState extends State<SignupConfigScreen>
 
   void _showLanguagePicker(BuildContext context, SettingsState settingsState) {
     if (settingsState.languages.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.translate('settings.error.noLanguages')),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      AppFlushbar.error(
+        context: context,
+        message: context.translate('settings.error.noLanguages'),
+      ).show(context);
       _loadSettings();
       return;
     }

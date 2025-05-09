@@ -7,6 +7,8 @@ import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sumit/services/version_service.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class AuthScreen extends StatefulWidget {
   final String? error;
@@ -47,9 +49,10 @@ class _AuthScreenState extends State<AuthScreen>
 
     if (widget.isCallback) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.translate('user_verified'))),
-        );
+        AppFlushbar.info(
+          context: context,
+          message: context.translate('user_verified'),
+        ).show(context);
       });
     }
   }
@@ -203,17 +206,12 @@ class _AuthScreenState extends State<AuthScreen>
                                     onSignUpComplete: (response) {
                                       logger.i('Sign up complete');
                                       if (response.session != null) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              context.translate(
-                                                'auth.signup.success',
-                                              ),
-                                            ),
+                                        AppFlushbar.success(
+                                          context: context,
+                                          message: context.translate(
+                                            'auth.signup.success',
                                           ),
-                                        );
+                                        ).show(context);
                                       }
                                       // Redirect to the sign in screen
                                       router.push('/auth');
@@ -222,17 +220,12 @@ class _AuthScreenState extends State<AuthScreen>
                                       logger.e('Error: $error');
                                       final errorCode =
                                           (error as AuthException).code;
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            context.translate(
-                                              'auth.error.$errorCode',
-                                            ),
-                                          ),
+                                      AppFlushbar.error(
+                                        context: context,
+                                        message: context.translate(
+                                          'auth.error.$errorCode',
                                         ),
-                                      );
+                                      ).show(context);
                                     },
                                     onPasswordResetEmailSent: () {
                                       logger.i('Password reset email sent');

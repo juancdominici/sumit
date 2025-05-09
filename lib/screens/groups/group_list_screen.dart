@@ -6,6 +6,8 @@ import 'package:sumit/screens/groups/join_group_sheet.dart';
 import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class GroupListScreen extends StatefulWidget {
   const GroupListScreen({super.key});
@@ -69,9 +71,10 @@ class _GroupListScreenState extends State<GroupListScreen> {
   Future<void> _copyInviteCode(String groupId) async {
     await Clipboard.setData(ClipboardData(text: groupId));
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.translate("groups.invite_code_copied"))),
-      );
+      AppFlushbar.info(
+        context: context,
+        message: context.translate("groups.invite_code_copied"),
+      ).show(context);
     }
   }
 
@@ -90,20 +93,19 @@ class _GroupListScreenState extends State<GroupListScreen> {
 
       await _loadGroups();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.translate("groups.deleted"))),
-        );
+        AppFlushbar.success(
+          context: context,
+          message: context.translate("groups.deleted"),
+        ).show(context);
         Navigator.of(context).pop();
       }
     } catch (e) {
       logger.e('Error deleting group: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${context.translate("common.error_occurred")}: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        AppFlushbar.error(
+          context: context,
+          message: "${context.translate("common.error_occurred")}: $e",
+        ).show(context);
       }
     }
   }
@@ -187,19 +189,18 @@ class _GroupListScreenState extends State<GroupListScreen> {
           .eq('id', group.id);
       await _loadGroups();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.translate("groups.renamed"))),
-        );
+        AppFlushbar.info(
+          context: context,
+          message: context.translate("groups.renamed"),
+        ).show(context);
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.translate("common.error_occurred")),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        AppFlushbar.error(
+          context: context,
+          message: context.translate("common.error_occurred"),
+        ).show(context);
       }
     }
   }

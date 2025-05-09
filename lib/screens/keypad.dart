@@ -5,6 +5,7 @@ import 'package:sumit/screens/keypad_button.dart';
 import 'package:sumit/state/module.dart';
 import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class Keypad extends StatefulWidget {
   const Keypad({super.key});
@@ -19,25 +20,20 @@ class _KeypadState extends State<Keypad> {
   Future<void> handleCheck() async {
     try {
       await displayState.handleAddRecord();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.translate('keypad.success')),
-            backgroundColor: Colors.green.shade300,
-          ),
-        );
-      }
+      AppFlushbar.success(
+        context: context,
+        message: context.translate('keypad.success'),
+      ).show(context);
     } catch (e) {
       if (mounted) {
         logger.e(e);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.translate('keypad.error', args: {'error': e.toString()}),
-            ),
-            backgroundColor: e is DisplayError ? e.color : Colors.red.shade300,
+        AppFlushbar.error(
+          context: context,
+          message: context.translate(
+            'keypad.error',
+            args: {'error': e.toString()},
           ),
-        );
+        ).show(context);
       }
     } finally {
       displayState.resetDisplay();

@@ -6,6 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:sumit/services/version_service.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class SettingsBlock extends StatefulWidget {
   const SettingsBlock({super.key});
@@ -138,16 +140,13 @@ class _SettingsBlockState extends State<SettingsBlock> {
                           );
                           Navigator.pop(context);
                         } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.translate(
-                                  'settings.error.updateCurrency',
-                                  args: {'error': e.toString()},
-                                ),
-                              ),
+                          AppFlushbar.error(
+                            context: context,
+                            message: context.translate(
+                              'settings.error.updateCurrency',
+                              args: {'error': e.toString()},
                             ),
-                          );
+                          ).show(context);
                         }
                       },
                     );
@@ -217,16 +216,13 @@ class _SettingsBlockState extends State<SettingsBlock> {
                           );
                           Navigator.pop(context);
                         } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.translate(
-                                  'settings.error.updateLanguage',
-                                  args: {'error': e.toString()},
-                                ),
-                              ),
+                          AppFlushbar.error(
+                            context: context,
+                            message: context.translate(
+                              'settings.error.updateLanguage',
+                              args: {'error': e.toString()},
                             ),
-                          );
+                          ).show(context);
                         }
                       },
                     );
@@ -314,16 +310,13 @@ class _SettingsBlockState extends State<SettingsBlock> {
                   await settingsState.updatePreferences(darkMode: value);
                 } catch (e) {
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          context.translate(
-                            'settings.error.updatePreferences',
-                            args: {'error': e.toString()},
-                          ),
-                        ),
+                    AppFlushbar.error(
+                      context: context,
+                      message: context.translate(
+                        'settings.error.updatePreferences',
+                        args: {'error': e.toString()},
                       ),
-                    );
+                    ).show(context);
                   }
                 }
               },

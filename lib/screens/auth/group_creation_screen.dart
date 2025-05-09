@@ -9,6 +9,8 @@ import 'package:sumit/services/encryption_service.dart';
 import 'package:sumit/models/group.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:another_flushbar/flushbar.dart';
+import 'package:sumit/utils/flushbar_helper.dart';
 
 class GroupCreationScreen extends StatefulWidget {
   final bool fromGroupList;
@@ -71,12 +73,10 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
 
     if (user == null) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.translate('auth.error.user_not_found')),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        AppFlushbar.error(
+          context: context,
+          message: context.translate('auth.error.user_not_found'),
+        ).show(context);
       }
       setState(() {
         _isLoading = false;
@@ -113,14 +113,12 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
       await settingsState.updatePreferences(hasCreatedGroup: true);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              context.translate('auth.group_creation.created_successfully'),
-            ),
-            behavior: SnackBarBehavior.floating,
+        AppFlushbar.success(
+          context: context,
+          message: context.translate(
+            'auth.group_creation.created_successfully',
           ),
-        );
+        ).show(context);
       }
 
       setState(() {
@@ -139,12 +137,10 @@ class GroupCreationScreenState extends State<GroupCreationScreen>
     } catch (e) {
       logger.e(e);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        AppFlushbar.error(
+          context: context,
+          message: e.toString(),
+        ).show(context);
       }
       setState(() {
         _isLoading = false;
@@ -496,22 +492,16 @@ class _ShareButtonState extends State<ShareButton> {
       );
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.translate('auth.group_creation.copied_to_clipboard'),
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      AppFlushbar.info(
+        context: context,
+        message: context.translate('auth.group_creation.copied_to_clipboard'),
+      ).show(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.translate('auth.group_creation.copy_error')),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      AppFlushbar.error(
+        context: context,
+        message: context.translate('auth.group_creation.copy_error'),
+      ).show(context);
     }
   }
 
