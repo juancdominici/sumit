@@ -641,36 +641,40 @@ class CalendarView extends StatelessWidget {
     return JuneBuilder(
       () => DisplayState(),
       builder:
-          (displayState) => Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: RecurringTypeSelector(
-                    selectedType: displayState.recurringExpenseType,
-                    onTypeSelected: (type) {
-                      displayState.recurringExpenseType = type;
-                      displayState.isRecurringExpense =
-                          (type != RecurringType.none);
-                      if (type == RecurringType.daily) {
-                      } else if (type == RecurringType.lastMonthDay ||
-                          type == RecurringType.lastBusinessDay ||
-                          type == RecurringType.monthly) {
-                        displayState.date = _adjustDateForRecurringType(
-                          displayState.date,
-                          type,
-                        );
-                      }
+          (displayState) => SizedBox(
+            height: MediaQuery.of(context).size.height * 0.50,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 32,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: RecurringTypeSelector(
+                      selectedType: displayState.recurringExpenseType,
+                      onTypeSelected: (type) {
+                        displayState.recurringExpenseType = type;
+                        displayState.isRecurringExpense =
+                            (type != RecurringType.none);
+                        if (type == RecurringType.daily) {
+                        } else if (type == RecurringType.lastMonthDay ||
+                            type == RecurringType.lastBusinessDay ||
+                            type == RecurringType.monthly) {
+                          displayState.date = _adjustDateForRecurringType(
+                            displayState.date,
+                            type,
+                          );
+                        }
 
-                      displayState.setState();
-                    },
+                        displayState.setState();
+                      },
+                    ),
                   ),
                 ),
-              ),
-              _buildDateSelector(displayState, context),
-            ],
+                _buildDateSelector(displayState, context),
+              ],
+            ),
           ),
     );
   }
@@ -694,104 +698,109 @@ class RecurringTypeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.80,
+      child: Column(
+        children: [
+          const SizedBox(height: 16),
+          InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.80,
+                ),
+                builder:
+                    (context) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                context.translate('calendar.recurring.title'),
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children:
+                                RecurringType.values
+                                    .map(
+                                      (type) => ListTile(
+                                        title: Text(
+                                          context.translate(
+                                            'calendar.recurring.${type.name}.text',
+                                          ),
+                                          style: TextStyle(
+                                            color:
+                                                selectedType == type
+                                                    ? Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary
+                                                    : null,
+                                            fontWeight:
+                                                selectedType == type
+                                                    ? FontWeight.bold
+                                                    : null,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          _getDescriptionForType(context, type),
+                                        ),
+                                        selected: selectedType == type,
+                                        onTap: () {
+                                          onTypeSelected(type);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    )
+                                    .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.translate(
+                      'calendar.recurring.${selectedType.name}.text',
+                    ),
+                    style: TextStyle(
+                      color:
+                          selectedType == RecurringType.none
+                              ? Theme.of(context).textTheme.bodyMedium?.color
+                              : Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color:
+                        selectedType == RecurringType.none
+                            ? Theme.of(context).textTheme.bodyMedium?.color
+                            : Theme.of(context).colorScheme.primary,
+                  ),
+                ],
+              ),
             ),
-            builder:
-                (context) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            context.translate('calendar.recurring.title'),
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const Spacer(),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children:
-                            RecurringType.values
-                                .map(
-                                  (type) => ListTile(
-                                    title: Text(
-                                      context.translate(
-                                        'calendar.recurring.${type.name}.text',
-                                      ),
-                                      style: TextStyle(
-                                        color:
-                                            selectedType == type
-                                                ? Theme.of(
-                                                  context,
-                                                ).colorScheme.primary
-                                                : null,
-                                        fontWeight:
-                                            selectedType == type
-                                                ? FontWeight.bold
-                                                : null,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      _getDescriptionForType(context, type),
-                                    ),
-                                    selected: selectedType == type,
-                                    onTap: () {
-                                      onTypeSelected(type);
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                    ),
-                  ],
-                ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.translate(
-                  'calendar.recurring.${selectedType.name}.text',
-                ),
-                style: TextStyle(
-                  color:
-                      selectedType == RecurringType.none
-                          ? Theme.of(context).textTheme.bodyMedium?.color
-                          : Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Icon(
-                Icons.arrow_drop_down,
-                color:
-                    selectedType == RecurringType.none
-                        ? Theme.of(context).textTheme.bodyMedium?.color
-                        : Theme.of(context).colorScheme.primary,
-              ),
-            ],
           ),
-        ),
+        ],
       ),
     );
   }

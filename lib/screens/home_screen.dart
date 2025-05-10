@@ -205,6 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 () => setState(() {
                                   _showCalendar = !_showCalendar;
                                 }),
+                            calendarOpen: _showCalendar,
                           ),
                         ),
                         AnimatedSize(

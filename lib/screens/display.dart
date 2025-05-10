@@ -10,7 +10,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Display extends StatefulWidget {
   final Function openCalendar;
-  const Display({super.key, required this.openCalendar});
+  final bool calendarOpen;
+  const Display({
+    super.key,
+    required this.openCalendar,
+    required this.calendarOpen,
+  });
 
   @override
   State<Display> createState() => _DisplayState();
@@ -396,7 +401,10 @@ class _DisplayState extends State<Display> {
                         IconButton(
                           icon: Icon(
                             Icons.calendar_month,
-                            color: Theme.of(context).iconTheme.color,
+                            color:
+                                widget.calendarOpen
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).iconTheme.color,
                           ),
                           iconSize: 32,
                           onPressed: () => widget.openCalendar(),
