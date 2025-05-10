@@ -55,14 +55,18 @@ class _HomeScreenState extends State<HomeScreen> {
             _showRecordsList ? Text(context.translate("records.title")) : null,
         actions: [
           SpeedDial(
-            icon: Icons.menu,
-            activeIcon: Icons.close,
-            buttonSize: const Size(56, 56),
+            icon: Icons.more_horiz,
+            activeIcon: Icons.close_rounded,
+            iconTheme: IconThemeData(size: 36),
+            buttonSize: const Size(60, 60),
             shape: const CircleBorder(),
             direction: SpeedDialDirection.down,
             backgroundColor: Theme.of(
               context,
-            ).colorScheme.primary.withValues(alpha: 0.3),
+            ).colorScheme.primary.withValues(alpha: 0),
+            activeBackgroundColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.2),
             foregroundColor: Theme.of(context).colorScheme.primary,
             overlayColor: Theme.of(context).colorScheme.surface,
             spacing: 12,
