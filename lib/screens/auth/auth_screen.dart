@@ -197,6 +197,7 @@ class _AuthScreenState extends State<AuthScreen>
                                     },
                                   )
                                   : SupaEmailAuth(
+                                    autofocus: false,
                                     localization: SupaEmailAuthLocalization(
                                       enterEmail: context.translate(
                                         'auth.email.label',
