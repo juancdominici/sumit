@@ -193,18 +193,18 @@
                 "description": "Repeats every year on the same date",
                 "every": "Every"
             },
-            "last_month_day": {
+            "lastMonthDay": {
                 "text": "Last Day of Month",
                 "description": "Repeats on the last day of each month",
                 "from": "Starting from:"
             },
-            "last_business_day": {
+            "lastBusinessDay": {
                 "text": "Last Business Day",
                 "description": "Repeats on the last business day of each month",
                 "from": "Starting from:",
                 "to": "To"
             },
-            "bi_weekly": {
+            "biweekly": {
                 "text": "Bi-Weekly",
                 "description": "Repeats every two weeks on the same day"
             },

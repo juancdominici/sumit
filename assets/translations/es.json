@@ -193,18 +193,18 @@
                 "description": "Se repite cada año en la misma fecha",
                 "every": "Cada"
             },
-            "last_month_day": {
+            "lastMonthDay": {
                 "text": "Último Día del Mes",
                 "description": "Se repite en el último día de cada mes",
                 "from": "Comenzando desde:"
             },
-            "last_business_day": {
+            "lastBusinessDay": {
                 "text": "Último Día Hábil",
                 "description": "Se repite en el último día hábil de cada mes",
                 "from": "Comenzando desde:",
                 "to": "Hasta"
             },
-            "bi_weekly": {
+            "biweekly": {
                 "text": "Quincenal",
                 "description": "Se repite cada dos semanas en el mismo día"
             },
