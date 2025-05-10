@@ -7,8 +7,8 @@ import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:sumit/services/version_service.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:sumit/utils/flushbar_helper.dart';
+import 'package:sumit/services/translations_service.dart';
 
 class AuthScreen extends StatefulWidget {
   final String? error;
@@ -105,8 +105,7 @@ class _AuthScreenState extends State<AuthScreen>
                         size: 80,
                         color: theme.colorScheme.primary,
                       ),
-                      const SizedBox(height: 24),
-
+                      const SizedBox(height: 16),
                       // Title
                       Text(
                         context.translate('auth.welcome'),
@@ -198,6 +197,50 @@ class _AuthScreenState extends State<AuthScreen>
                                     },
                                   )
                                   : SupaEmailAuth(
+                                    localization: SupaEmailAuthLocalization(
+                                      enterEmail: context.translate(
+                                        'auth.email.label',
+                                      ),
+                                      validEmailError: context.translate(
+                                        'auth.email.invalid',
+                                      ),
+                                      enterPassword: context.translate(
+                                        'auth.password.label',
+                                      ),
+                                      passwordLengthError: context.translate(
+                                        'auth.password.length_error',
+                                      ),
+                                      signIn: context.translate(
+                                        'auth.signin.button',
+                                      ),
+                                      signUp: context.translate(
+                                        'auth.signup.button',
+                                      ),
+                                      forgotPassword: context.translate(
+                                        'auth.password.forgot',
+                                      ),
+                                      dontHaveAccount: context.translate(
+                                        'auth.signup.cta',
+                                      ),
+                                      haveAccount: context.translate(
+                                        'auth.signin.cta',
+                                      ),
+                                      sendPasswordReset: context.translate(
+                                        'auth.password.reset.send',
+                                      ),
+                                      backToSignIn: context.translate(
+                                        'auth.signin.back',
+                                      ),
+                                      unexpectedError: context.translate(
+                                        'auth.error.unexpected',
+                                      ),
+                                      passwordResetSent: context.translate(
+                                        'auth.password.reset.sent',
+                                      ),
+                                      requiredFieldError: context.translate(
+                                        'auth.required_field_error',
+                                      ),
+                                    ),
                                     redirectTo: 'ar.com.sumit://auth-callback',
                                     onSignInComplete: (response) {
                                       logger.i('Sign in complete: $response');
@@ -238,20 +281,64 @@ class _AuthScreenState extends State<AuthScreen>
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // Version number
-                      Text(
-                        'v$_version',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.5),
-                        ),
-                        textAlign: TextAlign.right,
-                      ),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
+      // Place version and locale row at the bottom using bottomNavigationBar
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'v$_version',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+              ),
+            ),
+            JuneBuilder(
+              () => TranslationsService(),
+              builder: (translationsService) {
+                final languages = translationsService.languages;
+                if (languages.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+                final currentLocale =
+                    translationsService.currentLocale.languageCode;
+                int currentIndex = languages.indexWhere(
+                  (l) => l.i18nCode == currentLocale,
+                );
+                if (currentIndex == -1) currentIndex = 0;
+                final currentLanguage = languages[currentIndex];
+                final languageName = context.translate(
+                  'settings.languages.${currentLanguage.i18nCode}',
+                );
+                return TextButton.icon(
+                  icon: const Icon(Icons.language),
+                  label: Text(languageName),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    minimumSize: Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    final nextIndex = (currentIndex + 1) % languages.length;
+                    final nextLanguage = languages[nextIndex];
+                    translationsService.setLocale(nextLanguage.i18nCode);
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

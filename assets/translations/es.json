@@ -29,30 +29,35 @@
     "auth": {
         "welcome": "Bienvenido a Sumit",
         "subtitle": "Tu gestor de finanzas personales",
-        "login": {
-            "title": "Iniciar Sesión",
-            "email": "Correo Electrónico",
-            "password": "Contraseña",
-            "loginButton": "Iniciar Sesión",
-            "signupButton": "Registrarse",
-            "subtitle": "Inicia sesión para continuar",
-            "continue": "Continuar"
+        "email": {
+            "label": "Ingresa tu correo electrónico",
+            "invalid": "Dirección de correo electrónico inválida"
+        },
+        "password": {
+            "label": "Ingresa tu contraseña",
+            "length_error": "La contraseña debe tener al menos 8 caracteres",
+            "forgot": "¿Olvidaste tu contraseña?",
+            "reset": {
+                "sent": "Correo de restablecimiento de contraseña enviado",
+                "send": "Enviar enlace de restablecimiento"
+            }
+        },
+        "signin": {
+            "button": "Iniciar Sesión",
+            "cta": "¿Ya tienes una cuenta?",
+            "success": "Usuario creado, ¡verifica tu cuenta primero!"
         },
         "signup": {
-            "title": "Registrarse",
-            "email": "Correo Electrónico",
-            "password": "Contraseña",
-            "signupButton": "Registrarse",
-            "loginButton": "Iniciar Sesión",
-            "success": "Usuario creado, ¡verifica tu cuenta primero!",
-            "subtitle": "Regístrate para comenzar",
-            "continue": "Continuar"
+            "button": "Registrarse",
+            "cta": "¿No tienes una cuenta?",
+            "success": "Usuario creado, ¡verifica tu cuenta primero!"
         },
         "signup_config": {
             "title": "Empecemos con algunas preferencias",
             "subtitle": "Podrás cambiarlas luego desde el menú de configuración",
             "finishButton": "Finalizar Configuración"
         },
+        "required_field_error": "Por favor completa todos los campos requeridos",
         "group_creation": {
             "title": "Crear un Grupo",
             "subtitle": "Crea un grupo para compartir gastos con amigos y familia",
@@ -126,7 +131,8 @@
             "session_expired": "Tu sesión ha expirado.\nPor favor, inicia sesión nuevamente.",
             "conflict": "Ocurrió un conflicto.\nPor favor, intenta de nuevo.",
             "validation_failed": "Alguna información es inválida.\nPor favor, revisa tus datos.",
-            "unexpected_failure": "Ocurrió un error inesperado.\nPor favor, intenta más tarde."
+            "unexpected_failure": "Ocurrió un error inesperado.\nPor favor, intenta más tarde.",
+            "unexpected": "Ocurrió un error inesperado.\nPor favor, intenta más tarde."
         }
     },
     "display": {

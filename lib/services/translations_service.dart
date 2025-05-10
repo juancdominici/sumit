@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:june/june.dart';
 import 'package:sumit/utils.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sumit/models/language.dart';
 
 class TranslationsService extends JuneState {
   static final TranslationsService _instance = TranslationsService._internal();
@@ -11,6 +13,10 @@ class TranslationsService extends JuneState {
 
   Map<String, dynamic> _translations = {};
   Locale _currentLocale = const Locale('en');
+
+  // Cached list of languages
+  List<Language> _languages = [];
+  List<Language> get languages => _languages;
 
   Locale get currentLocale => _currentLocale;
 
@@ -28,6 +34,24 @@ class TranslationsService extends JuneState {
       setState();
     } catch (e) {
       logger.e('Error loading translations: $e');
+    }
+  }
+
+  // Fetch and cache languages from Supabase
+  Future<void> loadLanguages() async {
+    try {
+      final response = await Supabase.instance.client
+          .from('languages')
+          .select()
+          .order('name');
+      _languages =
+          (response as List).map((json) => Language.fromJson(json)).toList();
+      logger.i(
+        'Languages loaded: \\${_languages.map((l) => l.i18nCode).toList()}',
+      );
+      setState();
+    } catch (e) {
+      logger.e('Error loading languages: $e');
     }
   }
 

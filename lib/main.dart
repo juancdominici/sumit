@@ -37,6 +37,7 @@ Future<void> main() async {
 
   final translationsService = TranslationsService();
   await translationsService.loadTranslations();
+  await translationsService.loadLanguages();
 
   final settingsState = June.getState(() => SettingsState());
   await settingsState.initializeData();

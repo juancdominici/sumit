@@ -29,30 +29,35 @@
     "auth": {
         "welcome": "Welcome to Sumit",
         "subtitle": "Your personal finance manager",
-        "login": {
-            "title": "Login",
-            "email": "Email",
-            "password": "Password",
-            "loginButton": "Login",
-            "signupButton": "Sign Up",
-            "subtitle": "Sign in to continue",
-            "continue": "Continue"
+        "email": {
+            "label": "Enter your email",
+            "invalid": "Invalid email address"
+        },
+        "password": {
+            "label": "Enter your password",
+            "length_error": "Password must be at least 8 characters long",
+            "forgot": "Forgot your password?",
+            "reset": {
+                "sent": "Password reset email sent",
+                "send": "Send Reset Link"
+            }
+        },
+        "signin": {
+            "button": "Sign In",
+            "cta": "Already have an account?",
+            "success": "User created, verify your account first!"
         },
         "signup": {
-            "title": "Sign Up",
-            "email": "Email",
-            "password": "Password",
-            "signupButton": "Sign Up",
-            "loginButton": "Log in",
-            "success": "User created, verify your account first!",
-            "subtitle": "Sign up to get started",
-            "continue": "Continue"
+            "button": "Sign Up",
+            "cta": "Don't have an account?",
+            "success": "User created, verify your account first!"
         },
         "signup_config": {
             "title": "Let's get you started",
             "subtitle": "You can change these settings later in the settings menu",
             "finishButton": "Finish Setup"
         },
+        "required_field_error": "Please fill in all required fields",
         "group_creation": {
             "title": "Create a Group",
             "subtitle": "Create a group to share expenses with friends and family",
@@ -126,7 +131,8 @@
             "session_expired": "Your session has expired.\nPlease log in again.",
             "conflict": "A conflict occurred.\nPlease try again.",
             "validation_failed": "Some information is invalid.\nPlease check your input.",
-            "unexpected_failure": "An unexpected error occurred.\nPlease try again later."
+            "unexpected_failure": "An unexpected error occurred.\nPlease try again later.",
+            "unexpected": "An unexpected error occurred.\nPlease try again later."
         }
     },
     "display": {
