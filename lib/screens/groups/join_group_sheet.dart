@@ -4,7 +4,6 @@ import 'package:sumit/services/encryption_service.dart';
 import 'package:sumit/utils.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:sumit/utils/flushbar_helper.dart';
 
 class JoinGroupSheet extends StatefulWidget {

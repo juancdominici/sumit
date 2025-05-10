@@ -7,7 +7,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sumit/utils/translations_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sumit/services/translations_service.dart';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:sumit/utils/flushbar_helper.dart';
 
 class SignupConfigScreen extends StatefulWidget {
