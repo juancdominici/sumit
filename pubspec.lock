@@ -870,10 +870,10 @@ packages:
     dependency: "direct main"
     description:
       name: supabase_auth_ui
-      sha256: "2a9752f8f0fea257f834ee6da9ac764d73ada67c2947f74f5024c72bdd7f8b2e"
+      sha256: c1d9c5018f37701af94887fb5d15fa7eed284c58e4e06015644218a49140ec47
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.4"
+    version: "0.5.5"
   supabase_flutter:
     dependency: "direct main"
     description:
